@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "alfirdawsmanager_api", "alfirdawsmanager_api\alfirdawsmanager_api.csproj", "{ADA170E5-3580-4726-8CE9-17B1C07720F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "alfirdawsmanager_api", "alfirdawsmanager_api\alfirdawsmanager_api.csproj", "{ADA170E5-3580-4726-8CE9-17B1C07720F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "alfirdawsmanager.Data", "alfirdawsmanager.Data\alfirdawsmanager.Data.csproj", "{AD246252-7690-4EF7-B002-56D781D05CFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "alfirdawsmanager.Service", "alfirdawsmanager.Service\alfirdawsmanager.Service.csproj", "{39746C5C-9DCA-4FF3-80A0-9B7D7A3BCD7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{ADA170E5-3580-4726-8CE9-17B1C07720F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADA170E5-3580-4726-8CE9-17B1C07720F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADA170E5-3580-4726-8CE9-17B1C07720F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD246252-7690-4EF7-B002-56D781D05CFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD246252-7690-4EF7-B002-56D781D05CFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD246252-7690-4EF7-B002-56D781D05CFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD246252-7690-4EF7-B002-56D781D05CFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39746C5C-9DCA-4FF3-80A0-9B7D7A3BCD7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39746C5C-9DCA-4FF3-80A0-9B7D7A3BCD7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39746C5C-9DCA-4FF3-80A0-9B7D7A3BCD7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39746C5C-9DCA-4FF3-80A0-9B7D7A3BCD7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
