@@ -4,6 +4,136 @@
     "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager_api\\alfirdawsmanager_api.csproj": {}
   },
   "projects": {
+    "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Data\\alfirdawsmanager.Data.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Data\\alfirdawsmanager.Data.csproj",
+        "projectName": "alfirdawsmanager.Data",
+        "projectPath": "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Data\\alfirdawsmanager.Data.csproj",
+        "packagesPath": "C:\\Users\\TechExtensor\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Data\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\TechExtensor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.7, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Service\\alfirdawsmanager.Service.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Service\\alfirdawsmanager.Service.csproj",
+        "projectName": "alfirdawsmanager.Service",
+        "projectPath": "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Service\\alfirdawsmanager.Service.csproj",
+        "packagesPath": "C:\\Users\\TechExtensor\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Service\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\TechExtensor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Data\\alfirdawsmanager.Data.csproj": {
+                "projectPath": "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Data\\alfirdawsmanager.Data.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager_api\\alfirdawsmanager_api.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -27,7 +157,14 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Data\\alfirdawsmanager.Data.csproj": {
+                "projectPath": "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Data\\alfirdawsmanager.Data.csproj"
+              },
+              "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Service\\alfirdawsmanager.Service.csproj": {
+                "projectPath": "C:\\Users\\TechExtensor\\source\\repos\\alfirdawsmanager_api\\alfirdawsmanager.Service\\alfirdawsmanager.Service.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
