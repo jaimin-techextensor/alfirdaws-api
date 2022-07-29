@@ -36,7 +36,10 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-
+builder.Services.AddCors(p => p.AddPolicy("CorsPolicy", build =>
+{
+build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
 builder.Services.AddScoped<AlfirdawsManagerDbContext, AlfirdawsManagerDbContext>();
 builder.Services.AddScoped<IAuthenticateInterface, AuthenticateService>();
 
@@ -48,7 +51,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
