@@ -1,6 +1,7 @@
 ﻿using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.JwtHelpers;
 using alfirdawsmanager.Service.Models;
+using alfirdawsmanager.Service.Models.RequestModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,12 +28,12 @@ namespace alfirdawsmanager_api.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login(string UserName, string Password)
+        public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
             try
             {
                 var Token = new UserTokens();
-                var response = await _authenticateInterface.AuthenticateUser(UserName, Password);
+                var response = await _authenticateInterface.AuthenticateUser(loginRequest.UserName, loginRequest.Password);
                 if (response != null)
                 {
                     Token = JwtHelpers.GenTokenkey(new UserTokens()
