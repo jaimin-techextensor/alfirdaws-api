@@ -1,4 +1,5 @@
 ﻿using alfirdawsmanager.Service.Interface;
+using alfirdawsmanager.Service.JwtHelpers;
 using alfirdawsmanager.Service.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,12 +14,14 @@ namespace alfirdawsmanager_api.Controllers
         #region Members
 
         private IAuthenticateInterface _authenticateInterface;
+        private readonly JwtSettings jwtSettings;
 
         #endregion
 
-        public AuthenticateController(IAuthenticateInterface authenticateInterface)
+        public AuthenticateController(IAuthenticateInterface authenticateInterface, JwtSettings jwtSettings)
         {
             _authenticateInterface = authenticateInterface ?? throw new ArgumentNullException(nameof(authenticateInterface));
+            this.jwtSettings = jwtSettings;
         }
 
         [AllowAnonymous]
@@ -28,8 +31,18 @@ namespace alfirdawsmanager_api.Controllers
         {
             try
             {
+                var Token = new UserTokens();
                 var response = await _authenticateInterface.AuthenticateUser(UserName, Password);
-                if (response == null)
+                if (response != null)
+                {
+                    Token = JwtHelpers.GenTokenkey(new UserTokens()
+                    {
+                        Email = response.Email,
+                        UserName = response.UserName,
+                        Id = response.UserId,
+                    }, jwtSettings);
+                }
+                else
                 {
                     var userResponse = new UserResponse()
                     {
@@ -38,7 +51,7 @@ namespace alfirdawsmanager_api.Controllers
                     };
                     return Ok(userResponse);
                 }
-                return Ok(response);
+                return Ok(Token);
             }
             catch (Exception ex)
             {
