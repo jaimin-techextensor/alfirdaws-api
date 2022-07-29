@@ -38,7 +38,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddCors(p => p.AddPolicy("CorsPolicy", build =>
 {
-build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+build.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
 }));
 builder.Services.AddScoped<AlfirdawsManagerDbContext, AlfirdawsManagerDbContext>();
 builder.Services.AddScoped<IAuthenticateInterface, AuthenticateService>();
