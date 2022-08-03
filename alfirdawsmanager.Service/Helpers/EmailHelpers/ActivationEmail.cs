@@ -27,7 +27,7 @@ namespace alfirdawsmanager.Service.Helpers.EmailHelpers
             try
             {
                 MailMessage mail = new MailMessage();
-                mail.From = new MailAddress("bhavik.thakkar@techextensor.com", "DXN3FmgtnK518UhJ");
+                mail.From = new MailAddress("bhavik.thakkar@techextensor.com", "AlFirdaws Manager");
                 mail.To.Add(_sendMailTo);
                 mail.Subject = "Email Verification";
                 if (EmailTemplate == null)
