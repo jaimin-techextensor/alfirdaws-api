@@ -46,16 +46,9 @@ namespace alfirdawsmanager_api.Controllers
                 }
                 else
                 {
-                    //var userResponse = new UserResponse()
-                    //{
-                    //    Status = "User Not Found",
-                    //    Mesaage = "Invalid UserName or Password"
-                    //};
-                    //return Ok(userResponse);
                     return response = Unauthorized(new { Success = false, Message="Invalid UserName or Password" });
                 }
                 return response = Ok(new { Success = true, Message = "User Exists", Token});
-                //return Ok(Token);
             }
             catch (Exception ex)
             {
@@ -70,24 +63,38 @@ namespace alfirdawsmanager_api.Controllers
         {
             try
             {
-                var response = await _authenticateInterface.ForgotPassword(Email);
-                if (response != null)
+                IActionResult response = null;
+                var result = await _authenticateInterface.ForgotPassword(Email);
+                if (result != null)
                 {
-                    var userValidResponse = new UserResponse()
-                    {
-                        Status = "User Found",
-                        Mesaage = "Please check your email to reset your password !!!"
-                    };
-                    return Ok(userValidResponse);
+                    return response = Ok(new { Success = true, Message = "Please check your email to reset your password !!!"});
                 }
                 else
                 {
-                    var userResponse = new UserResponse()
-                    {
-                        Status = "User Not Found",
-                        Mesaage = "Invalid UserName or Password"
-                    };
-                    return Ok(userResponse);
+                    return response = NotFound(new { Success = false, Message = "Invalid Email" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(string Email, string Password)
+        {
+            try
+            {
+                IActionResult response = null;
+                var result = await _authenticateInterface.ResetPassword(Email, Password);
+                if (result != null)
+                {
+                    return response = Ok(new { Success = true, Message = "Password changed successfully !!!" });
+                }
+                else
+                {
+                    return response = BadRequest(new { Success = false, Message = "Something went wrong" });
                 }
             }
             catch (Exception ex)

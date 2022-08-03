@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using alfirdawsmanager.Service.Helpers.EmailHelpers;
 
 namespace alfirdawsmanager.Service.Service
 {
@@ -42,11 +43,87 @@ namespace alfirdawsmanager.Service.Service
                 }
                 if (dataToReturn.Password ==ToEncrypt(Password))
                 {
+                    dataToReturn.LastLoginTime = DateTime.Now;
+                    using (var repo = new RepositoryPattern<User>())
+                    {
+                        repo.Update(dataToReturn);
+                        repo.Save();
+                    }
                     return dataToReturn;
                 }
                 else
                 {
                     return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// ForgotPassword
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <returns></returns>
+        public async Task<User> ForgotPassword(string Email)
+        {
+            try
+            {
+                var dataToReturn = new User();
+                dataToReturn = _context.Users.SingleOrDefault(x => x.Email.Trim().ToLower() == Email.Trim().ToLower());
+                if (dataToReturn == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    string token = Guid.NewGuid().ToString();
+                    string activationUrl = "http://localhost:4200/reset-password?email="+ dataToReturn.Email+"&token="+ token;
+                    ActivationEmail.SendActivationEmail(Email, activationUrl);
+
+                    dataToReturn.SendActivationEmail = true;
+                    using (var repo = new RepositoryPattern<User>())
+                    {
+                        repo.Update(dataToReturn);
+                        repo.Save();
+                    }
+;                    return dataToReturn;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// ResetPassword
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <param name="Password"></param>
+        /// <returns></returns>
+        public async Task<User> ResetPassword(string Email,string Password)
+        {
+            try
+            {
+                var dataToReturn = new User();
+                dataToReturn = _context.Users.SingleOrDefault(x => x.Email.Trim().ToLower() == Email.Trim().ToLower());
+                if (dataToReturn == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    dataToReturn.Password = ToEncrypt(Password);
+                    dataToReturn.IsPasswordChanged = true;
+                    using (var repo = new RepositoryPattern<User>())
+                    {
+                        repo.Update(dataToReturn);
+                        repo.Save();
+                    }
+                    return dataToReturn;
                 }
             }
             catch (Exception ex)
