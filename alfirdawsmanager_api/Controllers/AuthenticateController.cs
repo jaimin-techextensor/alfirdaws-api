@@ -32,16 +32,53 @@ namespace alfirdawsmanager_api.Controllers
         {
             try
             {
+                IActionResult response = null;
                 var Token = new UserTokens();
-                var response = await _authenticateInterface.AuthenticateUser(loginRequest.UserName, loginRequest.Password);
-                if (response != null)
+                var result = await _authenticateInterface.AuthenticateUser(loginRequest.UserName, loginRequest.Password);
+                if (result != null)
                 {
                     Token = JwtHelpers.GenTokenkey(new UserTokens()
                     {
-                        Email = response.Email,
-                        UserName = response.UserName,
-                        Id = response.UserId,
+                        Email = result.Email,
+                        UserName = result.UserName,
+                        Id = result.UserId,
                     }, jwtSettings);
+                }
+                else
+                {
+                    //var userResponse = new UserResponse()
+                    //{
+                    //    Status = "User Not Found",
+                    //    Mesaage = "Invalid UserName or Password"
+                    //};
+                    //return Ok(userResponse);
+                    return response = Unauthorized(new { Success = false, Message="Invalid UserName or Password" });
+                }
+                return response = Ok(new { Success = true, Message = "User Exists", Token});
+                //return Ok(Token);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword(string Email)
+        {
+            try
+            {
+                var response = await _authenticateInterface.ForgotPassword(Email);
+                if (response != null)
+                {
+                    var userValidResponse = new UserResponse()
+                    {
+                        Status = "User Found",
+                        Mesaage = "Please check your email to reset your password !!!"
+                    };
+                    return Ok(userValidResponse);
                 }
                 else
                 {
@@ -52,7 +89,6 @@ namespace alfirdawsmanager_api.Controllers
                     };
                     return Ok(userResponse);
                 }
-                return Ok(Token);
             }
             catch (Exception ex)
             {
