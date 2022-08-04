@@ -20,6 +20,15 @@ namespace alfirdawsmanager.Data.Models
         public virtual DbSet<AssignedRole> AssignedRoles { get; set; } = null!;
         public virtual DbSet<Campaign> Campaigns { get; set; } = null!;
         public virtual DbSet<CampaignType> CampaignTypes { get; set; } = null!;
+        public virtual DbSet<Case> Cases { get; set; } = null!;
+        public virtual DbSet<CaseCategory> CaseCategories { get; set; } = null!;
+        public virtual DbSet<CaseLog> CaseLogs { get; set; } = null!;
+        public virtual DbSet<CaseOrigin> CaseOrigins { get; set; } = null!;
+        public virtual DbSet<CasePriority> CasePriorities { get; set; } = null!;
+        public virtual DbSet<CaseSeverity> CaseSeverities { get; set; } = null!;
+        public virtual DbSet<CaseStatus> CaseStatuses { get; set; } = null!;
+        public virtual DbSet<CaseStatusReason> CaseStatusReasons { get; set; } = null!;
+        public virtual DbSet<CaseType> CaseTypes { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Country> Countries { get; set; } = null!;
         public virtual DbSet<InvoiceType> InvoiceTypes { get; set; } = null!;
@@ -42,7 +51,7 @@ namespace alfirdawsmanager.Data.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=69.167.148.96,782;User ID=alfirdaws_dev;Password=Tech2023!;Database=alfirdaws_test;Trusted_Connection=False;Integrated Security=False");
+                optionsBuilder.UseSqlServer("Server=69.167.148.96,782;Database=alfirdaws_test;User ID=alfirdaws_dev;Password=Tech2023!");
             }
         }
 
@@ -119,6 +128,172 @@ namespace alfirdawsmanager.Data.Models
             modelBuilder.Entity<CampaignType>(entity =>
             {
                 entity.ToTable("CampaignType", "alfirdaws_usr");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Case>(entity =>
+            {
+                entity.ToTable("Case", "alfirdaws_usr");
+
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Duration)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.LastUpdateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Resolution)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ResolutionDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Title)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.CaseCategory)
+                    .WithMany(p => p.Cases)
+                    .HasForeignKey(d => d.CaseCategoryId)
+                    .HasConstraintName("FK_Case_CaseCategory");
+
+                entity.HasOne(d => d.CaseOrigin)
+                    .WithMany(p => p.Cases)
+                    .HasForeignKey(d => d.CaseOriginId)
+                    .HasConstraintName("FK_Case_CaseOrigin");
+
+                entity.HasOne(d => d.CasePriority)
+                    .WithMany(p => p.Cases)
+                    .HasForeignKey(d => d.CasePriorityId)
+                    .HasConstraintName("FK_Case_CasePriority");
+
+                entity.HasOne(d => d.CaseSeverity)
+                    .WithMany(p => p.Cases)
+                    .HasForeignKey(d => d.CaseSeverityId)
+                    .HasConstraintName("FK_Case_CaseSeverity");
+
+                entity.HasOne(d => d.CaseStatus)
+                    .WithMany(p => p.Cases)
+                    .HasForeignKey(d => d.CaseStatusId)
+                    .HasConstraintName("FK_Case_CaseStatus");
+
+                entity.HasOne(d => d.CaseStatusReason)
+                    .WithMany(p => p.Cases)
+                    .HasForeignKey(d => d.CaseStatusReasonId)
+                    .HasConstraintName("FK_Case_CaseStatusReason");
+
+                entity.HasOne(d => d.CaseType)
+                    .WithMany(p => p.Cases)
+                    .HasForeignKey(d => d.CaseTypeId)
+                    .HasConstraintName("FK_Case_CaseType");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Cases)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Case_User");
+            });
+
+            modelBuilder.Entity<CaseCategory>(entity =>
+            {
+                entity.ToTable("CaseCategory", "alfirdaws_usr");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<CaseLog>(entity =>
+            {
+                entity.ToTable("CaseLog", "alfirdaws_usr");
+
+                entity.Property(e => e.CaseLogId).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Action)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Timestamp).HasColumnType("datetime");
+
+                entity.HasOne(d => d.CaseLogNavigation)
+                    .WithOne(p => p.CaseLog)
+                    .HasForeignKey<CaseLog>(d => d.CaseLogId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CaseLog_Case");
+            });
+
+            modelBuilder.Entity<CaseOrigin>(entity =>
+            {
+                entity.ToTable("CaseOrigin", "alfirdaws_usr");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<CasePriority>(entity =>
+            {
+                entity.ToTable("CasePriority", "alfirdaws_usr");
+
+                entity.Property(e => e.Color)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<CaseSeverity>(entity =>
+            {
+                entity.ToTable("CaseSeverity", "alfirdaws_usr");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<CaseStatus>(entity =>
+            {
+                entity.ToTable("CaseStatus", "alfirdaws_usr");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<CaseStatusReason>(entity =>
+            {
+                entity.ToTable("CaseStatusReason", "alfirdaws_usr");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.CaseStatus)
+                    .WithMany(p => p.CaseStatusReasons)
+                    .HasForeignKey(d => d.CaseStatusId)
+                    .HasConstraintName("FK_CaseStatusReason_CaseStatus");
+            });
+
+            modelBuilder.Entity<CaseType>(entity =>
+            {
+                entity.ToTable("CaseType", "alfirdaws_usr");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
@@ -327,7 +502,7 @@ namespace alfirdawsmanager.Data.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Password)
-                    .HasMaxLength(10)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.UserName)

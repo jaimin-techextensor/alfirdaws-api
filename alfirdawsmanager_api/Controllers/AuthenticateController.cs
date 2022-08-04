@@ -25,6 +25,8 @@ namespace alfirdawsmanager_api.Controllers
             this.jwtSettings = jwtSettings;
         }
 
+        #region Methods
+
         [AllowAnonymous]
         [HttpPost]
         [Route("Login")]
@@ -46,9 +48,9 @@ namespace alfirdawsmanager_api.Controllers
                 }
                 else
                 {
-                    return response = Unauthorized(new { Success = false, Message="Invalid UserName or Password" });
+                    return response = Unauthorized(new { Success = false, Message = "Invalid UserName or Password" });
                 }
-                return response = Ok(new { Success = true, Message = "User Exists", Token});
+                return response = Ok(new { Success = true, Message = "User Exists", Token });
             }
             catch (Exception ex)
             {
@@ -67,7 +69,7 @@ namespace alfirdawsmanager_api.Controllers
                 var result = await _authenticateInterface.ForgotPassword(Email);
                 if (result != null)
                 {
-                    return response = Ok(new { Success = true, Message = "Please check your email to reset your password !!!"});
+                    return response = Ok(new { Success = true, Message = "Please check your email to reset your password !!!" });
                 }
                 else
                 {
@@ -102,5 +104,9 @@ namespace alfirdawsmanager_api.Controllers
                 throw;
             }
         }
+
+        #endregion
+
+
     }
 }
