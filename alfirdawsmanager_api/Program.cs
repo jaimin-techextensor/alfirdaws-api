@@ -1,7 +1,11 @@
 using alfirdawsmanager.Data.Models;
 using alfirdawsmanager.Service.Extensions;
+using alfirdawsmanager.Service.Helpers.EmailHelpers;
+using alfirdawsmanager.Service.Infrastructure;
 using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Service;
+using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,15 +46,31 @@ build.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
 }));
 builder.Services.AddScoped<AlfirdawsManagerDbContext, AlfirdawsManagerDbContext>();
 builder.Services.AddScoped<IAuthenticateInterface, AuthenticateService>();
+builder.Services.AddScoped<ISettingsInterface, SettingsService>();
+builder.Services.AddScoped<IUserInterface, UserService>();
+var config = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new AutomapperConfigurator());
+});
+
+var mapper = config.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 
 var app = builder.Build();
+Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment = app.Services.GetRequiredService<Microsoft.AspNetCore.Hosting.IHostingEnvironment>();
+
+ActivationEmail.Initialize(_hostingEnvironment);
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+}   
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 

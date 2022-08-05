@@ -8,6 +8,7 @@ namespace alfirdawsmanager.Data.Models
         public User()
         {
             AssignedRoles = new HashSet<AssignedRole>();
+            Cases = new HashSet<Case>();
         }
 
         public int UserId { get; set; }
@@ -24,5 +25,6 @@ namespace alfirdawsmanager.Data.Models
         public bool? ChangePwdAtNextLogin { get; set; }
 
         public virtual ICollection<AssignedRole> AssignedRoles { get; set; }
+        public virtual ICollection<Case> Cases { get; set; }
     }
 }

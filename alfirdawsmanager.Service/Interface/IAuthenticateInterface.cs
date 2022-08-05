@@ -10,5 +10,7 @@ namespace alfirdawsmanager.Service.Interface
     public interface IAuthenticateInterface
     {
         Task<User> AuthenticateUser(string UserName, string Password);
+        Task<User> ForgotPassword(string Email);
+        Task<User> ResetPassword(string Email,string Password);
     }
 }

@@ -25,6 +25,8 @@ namespace alfirdawsmanager_api.Controllers
             this.jwtSettings = jwtSettings;
         }
 
+        #region Methods
+
         [AllowAnonymous]
         [HttpPost]
         [Route("Login")]
@@ -32,32 +34,79 @@ namespace alfirdawsmanager_api.Controllers
         {
             try
             {
+                IActionResult response = null;
                 var Token = new UserTokens();
-                var response = await _authenticateInterface.AuthenticateUser(loginRequest.UserName, loginRequest.Password);
-                if (response != null)
+                var result = await _authenticateInterface.AuthenticateUser(loginRequest.UserName, loginRequest.Password);
+                if (result != null)
                 {
                     Token = JwtHelpers.GenTokenkey(new UserTokens()
                     {
-                        Email = response.Email,
-                        UserName = response.UserName,
-                        Id = response.UserId,
+                        Email = result.Email,
+                        UserName = result.UserName,
+                        Id = result.UserId,
                     }, jwtSettings);
                 }
                 else
                 {
-                    var userResponse = new UserResponse()
-                    {
-                        Status = "User Not Found",
-                        Mesaage = "Invalid UserName or Password"
-                    };
-                    return Ok(userResponse);
+                    return response = Unauthorized(new { Success = false, Message = "Invalid UserName or Password" });
                 }
-                return Ok(Token);
+                return response = Ok(new { Success = true, Message = "User Exists", Token });
             }
             catch (Exception ex)
             {
                 throw;
             }
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword(string Email)
+        {
+            try
+            {
+                IActionResult response = null;
+                var result = await _authenticateInterface.ForgotPassword(Email);
+                if (result != null)
+                {
+                    return response = Ok(new { Success = true, Message = "Please check your email to reset your password !!!" });
+                }
+                else
+                {
+                    return response = NotFound(new { Success = false, Message = "Invalid Email" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(string Email, string Password)
+        {
+            try
+            {
+                IActionResult response = null;
+                var result = await _authenticateInterface.ResetPassword(Email, Password);
+                if (result != null)
+                {
+                    return response = Ok(new { Success = true, Message = "Password changed successfully !!!" });
+                }
+                else
+                {
+                    return response = BadRequest(new { Success = false, Message = "Something went wrong" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        #endregion
+
+
     }
 }
