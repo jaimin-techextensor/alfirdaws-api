@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
+using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace alfirdawsmanager.Service.Helpers.EmailHelpers
             _hostingEnvironment = hostingEnvironment;
         }
 
-        public static bool SendActivationEmail(string _sendMailTo,string activationUrl)
+        public static bool SendActivationEmail(string _sendMailTo, string activationUrl)
         {
             try
             {
@@ -30,17 +31,24 @@ namespace alfirdawsmanager.Service.Helpers.EmailHelpers
                 mail.From = new MailAddress("bhavik.thakkar@techextensor.com", "AlFirdaws Manager");
                 mail.To.Add(_sendMailTo);
                 mail.Subject = "Email Verification";
-                if (EmailTemplate == null)
-                    EmailTemplate = ReadPhysicalFile("Templates/ActivationEmailTemplate.html");
-                string emailMessage = EmailTemplate.Replace("{URL}", activationUrl);
+                var EmailTemplatePath = Path.Combine(_hostingEnvironment.WebRootPath, "Templates\\ActivationEmailTemplate.html");
+                //if (EmailTemplate == null)
+                    //EmailTemplate = ReadPhysicalFile(_hostingEnvironment.WebRootFileProvider.GetFileInfo("Templates/ActivationEmailTemplate.html")?.PhysicalPath);
+                    //EmailTemplate = ReadPhysicalFile(EmailTemplatePath);
+                var builder = new BodyBuilder();
+                using (StreamReader SourceReader = System.IO.File.OpenText(EmailTemplatePath))
+                {
+                    builder.HtmlBody = SourceReader.ReadToEnd();
+                }
+                string emailMessage = builder.HtmlBody.Replace("{URL}", activationUrl);
                 mail.Body = emailMessage;
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient();
                 smtp.Host = "smtp-relay.sendinblue.com";
-                smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new System.Net.NetworkCredential("bhavik.thakkar@techextensor.com", "DXN3FmgtnK518UhJ");
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new System.Net.NetworkCredential("bhavik.thakkar@techextensor.com", "DXN3FmgtnK518UhJ");
                 smtp.Send(mail);
                 return true;
             }
@@ -50,24 +58,23 @@ namespace alfirdawsmanager.Service.Helpers.EmailHelpers
             }
         }
 
-        private static string ReadPhysicalFile(string path)
-        {
-            if (_hostingEnvironment == null)
-                throw new InvalidOperationException($"{nameof(ActivationEmail)} is not initialized");
+        //private static string ReadPhysicalFile(string path)
+        //{
+        //    if (_hostingEnvironment == null)
+        //        throw new InvalidOperationException($"{nameof(ActivationEmail)} is not initialized");
+        //    IFileInfo fileInfo = _hostingEnvironment.ContentRootFileProvider.GetFileInfo(path);
 
-            IFileInfo fileInfo = _hostingEnvironment.ContentRootFileProvider.GetFileInfo(path);
+        //    if (!fileInfo.Exists)
+        //        throw new FileNotFoundException($"Template file located at \"{path}\" was not found");
 
-            if (!fileInfo.Exists)
-                throw new FileNotFoundException($"Template file located at \"{path}\" was not found");
-
-            using (var fs = fileInfo.CreateReadStream())
-            {
-                using (var sr = new StreamReader(fs))
-                {
-                    return sr.ReadToEnd();
-                }
-            }
-        }
+        //    using (var fs = fileInfo.CreateReadStream())
+        //    {
+        //        using (var sr = new StreamReader(fs))
+        //        {
+        //            return sr.ReadToEnd();
+        //        }
+        //    }
+        //}
 
     }
 }

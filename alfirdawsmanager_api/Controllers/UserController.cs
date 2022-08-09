@@ -1,5 +1,6 @@
 ﻿using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Models;
+using alfirdawsmanager.Service.Models.RequestModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,6 +38,30 @@ namespace alfirdawsmanager_api.Controllers
                 else
                 {
                     return response = NotFound(new { Success = false, Message = "Could not retrieve users overview" });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("SearchUsers")]
+        public async Task<IActionResult> SearchUsers([FromQuery]SearchUsersRequest searchUsersRequest)
+        {
+            try
+            {
+                IActionResult response = null;
+                var result = await _userInterface.SearchUsers(searchUsersRequest.SearchText);
+                if (result != null)
+                {
+                    return response = Ok(new { Success = true, Message = "Searched users retrieved", Data = result });
+                }
+                else
+                {
+                    return response = NotFound(new { Success = false, Message = "Could not retrieve searched users" });
                 }
 
             }
