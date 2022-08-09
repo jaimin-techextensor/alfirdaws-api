@@ -61,12 +61,12 @@ namespace alfirdawsmanager_api.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword(string Email)
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest forgotPasswordRequest)
         {
             try
             {
                 IActionResult response = null;
-                var result = await _authenticateInterface.ForgotPassword(Email);
+                var result = await _authenticateInterface.ForgotPassword(forgotPasswordRequest.Email);
                 if (result != null)
                 {
                     return response = Ok(new { Success = true, Message = "Please check your email to reset your password !!!" });
@@ -84,12 +84,12 @@ namespace alfirdawsmanager_api.Controllers
 
         [HttpPost]
         [Route("ResetPassword")]
-        public async Task<IActionResult> ResetPassword(string Email, string Password)
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest resetPasswordRequest)
         {
             try
             {
                 IActionResult response = null;
-                var result = await _authenticateInterface.ResetPassword(Email, Password);
+                var result = await _authenticateInterface.ResetPassword(resetPasswordRequest.Email, resetPasswordRequest.Password);
                 if (result != null)
                 {
                     return response = Ok(new { Success = true, Message = "Password changed successfully !!!" });

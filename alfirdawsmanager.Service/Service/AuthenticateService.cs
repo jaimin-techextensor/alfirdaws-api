@@ -80,7 +80,7 @@ namespace alfirdawsmanager.Service.Service
                 else
                 {
                     string token = Guid.NewGuid().ToString();
-                    string activationUrl = "http://localhost:4200/reset-password?email="+ dataToReturn.Email+"&token="+ token;
+                    string activationUrl = "http://techext-001-site50.itempurl.com/reset-password?email=" + dataToReturn.Email+"&token="+ token;
                     ActivationEmail.SendActivationEmail(Email, activationUrl);
 
                     dataToReturn.SendActivationEmail = true;

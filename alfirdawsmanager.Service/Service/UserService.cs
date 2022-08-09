@@ -45,6 +45,33 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
+        /// <summary>
+        /// SearchUsers
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<UserModel>> SearchUsers(string searchText)
+        {
+            try
+            {
+                var dataToReturn = new List<UserModel>();
+                using (var repo = new RepositoryPattern<User>())
+                {
+                    dataToReturn = _mapper.Map<List<UserModel>>(repo.SelectAll().OrderByDescending(a => a.UserId)
+                                                                .Where(a=>
+                                                                           ((a.UserName != null) && (a.UserName.Contains(searchText)))
+                                                                        || ((a.Name !=null) && (a.Name.Contains(searchText))) 
+                                                                        || ((a.LastName != null) && (a.LastName.Contains(searchText))) 
+                                                                        || ((a.Email != null) && (a.Email.Contains(searchText)))
+                                                                       ).ToList());
+                }
+                return dataToReturn;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         #endregion
     }
 }

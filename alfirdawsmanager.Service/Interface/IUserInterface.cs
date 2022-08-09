@@ -11,5 +11,6 @@ namespace alfirdawsmanager.Service.Interface
     public interface IUserInterface
     {
         Task<List<UserModel>> GetUsersOverview();
+        Task<List<UserModel>> SearchUsers(string searchText);
     }
 }
