@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using alfirdawsmanager.Service.Helpers.EmailHelpers;
+using alfirdawsmanager.Service.Helpers.Security;
 
 namespace alfirdawsmanager.Service.Service
 {
@@ -41,7 +42,7 @@ namespace alfirdawsmanager.Service.Service
                 {
                     return null;
                 }
-                if (dataToReturn.Password ==ToEncrypt(Password))
+                if (dataToReturn.Password ==PasswordEncryption.ToEncrypt(Password))
                 {
                     dataToReturn.LastLoginTime = DateTime.Now;
                     using (var repo = new RepositoryPattern<User>())
@@ -116,7 +117,7 @@ namespace alfirdawsmanager.Service.Service
                 }
                 else
                 {
-                    dataToReturn.Password = ToEncrypt(Password);
+                    dataToReturn.Password = PasswordEncryption.ToEncrypt(Password);
                     dataToReturn.IsPasswordChanged = true;
                     using (var repo = new RepositoryPattern<User>())
                     {
@@ -127,28 +128,6 @@ namespace alfirdawsmanager.Service.Service
                 }
             }
             catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        private static string ToEncrypt(string password)
-        {
-            byte[] key = { };
-            byte[] iv = { 10, 20, 30, 40, 50, 60, 70, 80 };
-            byte[] inputByteArray;
-            try
-            {
-                key=Encoding.UTF8.GetBytes(encryptionKey.ToString().Substring(0,8));
-                DESCryptoServiceProvider des = new DESCryptoServiceProvider();
-                inputByteArray = Encoding.UTF8.GetBytes(password);
-                MemoryStream ms = new MemoryStream();
-                CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(key, iv), CryptoStreamMode.Write);
-                cs.Write(inputByteArray, 0, inputByteArray.Length);
-                cs.FlushFinalBlock();
-                return Convert.ToBase64String(ms.ToArray());
-            }
-            catch (Exception)
             {
                 throw;
             }

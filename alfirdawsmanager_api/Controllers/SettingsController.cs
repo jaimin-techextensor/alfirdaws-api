@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace alfirdawsmanager_api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/settings")]
     [ApiController]
     public class SettingsController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace alfirdawsmanager_api.Controllers
         #region Methods
 
         [HttpGet]
-        [Route("GetSettingsCounters")]
+        [Route("counters")]
         public async Task<IActionResult> GetSettingsCounters()
         {
             try

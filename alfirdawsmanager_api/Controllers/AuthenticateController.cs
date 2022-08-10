@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace alfirdawsmanager_api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/authenticate")]
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
@@ -29,7 +29,7 @@ namespace alfirdawsmanager_api.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("Login")]
+        [Route("login")]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
             try
@@ -60,7 +60,7 @@ namespace alfirdawsmanager_api.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("ForgotPassword")]
+        [Route("forgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest forgotPasswordRequest)
         {
             try
@@ -83,7 +83,7 @@ namespace alfirdawsmanager_api.Controllers
         }
 
         [HttpPost]
-        [Route("ResetPassword")]
+        [Route("resetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest resetPasswordRequest)
         {
             try
@@ -106,7 +106,7 @@ namespace alfirdawsmanager_api.Controllers
         }
 
         #endregion
-
+        
 
     }
 }

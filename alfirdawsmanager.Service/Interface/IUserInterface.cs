@@ -12,5 +12,8 @@ namespace alfirdawsmanager.Service.Interface
     {
         Task<List<UserModel>> GetUsersOverview();
         Task<List<UserModel>> SearchUsers(string searchText);
+        bool CreateUser(UserModel userModel);
+        bool UpdateUser(UserModel userModel);
+        bool DeleteUser(int UserId);
     }
 }
