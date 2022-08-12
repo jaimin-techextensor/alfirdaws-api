@@ -197,7 +197,7 @@ namespace alfirdawsmanager_api.Controllers
                 }
                 else
                 {
-                    return response = BadRequest(new { Success = false, Message = "Something went wrong" });
+                    return response = NotFound(new { Success = false, Message = "Something went wrong" });
                 }
             }
             catch (Exception ex)

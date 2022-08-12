@@ -113,9 +113,12 @@ namespace alfirdawsmanager.Service.Service
                 using (var repo = new RepositoryPattern<User>())
                 {
                     dataToReturn = _mapper.Map<User>(repo.SelectByID(UserId));
-                    if (dataToReturn.Picture != null)
+                    if (dataToReturn != null)
                     {
-                        dataToReturn.Picture = GetImage(Convert.ToBase64String(dataToReturn.Picture));
+                        if (dataToReturn.Picture != null)
+                        {
+                            dataToReturn.Picture = GetImage(Convert.ToBase64String(dataToReturn.Picture));
+                        }
                     }
                 }
                 return dataToReturn;
@@ -215,10 +218,15 @@ namespace alfirdawsmanager.Service.Service
                 bool success = true;
                 using (var repo = new RepositoryPattern<User>())
                 {
-                    repo.Delete(UserId);
-                    repo.Save();
-                    success = true;
-                    return success;
+                    var res= _mapper.Map<User>(repo.SelectByID(UserId));
+                    if (res != null) 
+                    { 
+                        repo.Delete(UserId);
+                        repo.Save();
+                        success = true;
+                        return success;
+                    }
+                    return success = false;
                 }
             }
             catch (Exception ex)
