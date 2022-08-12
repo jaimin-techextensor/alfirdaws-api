@@ -14,6 +14,7 @@ namespace alfirdawsmanager.Service.Infrastructure
         public AutomapperConfigurator()
         {
             CreateMap<User, UserModel>().ReverseMap(); //reverse so the both direction
+            CreateMap<Role, RoleModel>().ReverseMap(); //reverse so the both direction
         }
     }
 }

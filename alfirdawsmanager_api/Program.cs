@@ -50,6 +50,7 @@ builder.Services.AddScoped<AlfirdawsManagerDbContext, AlfirdawsManagerDbContext>
 builder.Services.AddScoped<IAuthenticateInterface, AuthenticateService>();
 builder.Services.AddScoped<ISettingsInterface, SettingsService>();
 builder.Services.AddScoped<IUserInterface, UserService>();
+builder.Services.AddScoped<IRoleInterface, RoleService>();
 var config = new MapperConfiguration(cfg =>
 {
     cfg.AddProfile(new AutomapperConfigurator());

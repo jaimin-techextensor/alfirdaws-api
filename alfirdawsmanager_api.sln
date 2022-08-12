@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "alfirdawsmanager.Data", "al
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "alfirdawsmanager.Service", "alfirdawsmanager.Service\alfirdawsmanager.Service.csproj", "{39746C5C-9DCA-4FF3-80A0-9B7D7A3BCD7B}"
 EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

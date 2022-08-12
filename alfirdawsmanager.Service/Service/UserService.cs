@@ -139,7 +139,7 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 bool success = true;
-                byte[] uniqueFileName = UploadFile(userModel);
+                byte[] uniqueFileName = null;// UploadFile(userModel);
                 var objUserModel = new User();
                 //var objUserModel = _mapper.Map<User>(userModel);
                 objUserModel.UserName = userModel.UserName;
@@ -177,7 +177,7 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 bool success = true;
-                byte[] uniqueFileName = UploadFile(userModel);
+                byte[] uniqueFileName = null;// UploadFile(userModel);
                 var obj = _context.Users.Where(a => a.UserId == userModel.UserId).SingleOrDefault();
                 if (obj != null)
                 {
@@ -248,7 +248,7 @@ namespace alfirdawsmanager.Service.Service
             if (userModel.Picture != null)
             {
                 MemoryStream ms = new MemoryStream();
-                userModel.Picture.CopyTo(ms);
+                //userModel.Picture.CopyTo(ms);
                 byte[] imageBytes = ms.ToArray();
                 base64String = Convert.ToBase64String(imageBytes);
                 //uniqueFileName = ms.ToArray().ToString();
