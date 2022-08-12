@@ -27,6 +27,11 @@ namespace alfirdawsmanager_api.Controllers
 
         #region Methods
 
+        /// <summary>
+        /// Validates the credentials of the user
+        /// </summary>
+        /// <param name="loginRequest"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
@@ -58,6 +63,11 @@ namespace alfirdawsmanager_api.Controllers
             }
         }
 
+        /// <summary>
+        /// Sends out a password recovery link tot the user
+        /// </summary>
+        /// <param name="forgotPasswordRequest"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("forgotPassword")]
@@ -82,6 +92,11 @@ namespace alfirdawsmanager_api.Controllers
             }
         }
 
+        /// <summary>
+        /// Resets the password for the user with a new password
+        /// </summary>
+        /// <param name="resetPasswordRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("resetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest resetPasswordRequest)

@@ -39,6 +39,8 @@ builder.Services.AddSwaggerGen(options =>
                 new string[] {}
         }
     });
+    var filePath = Path.Combine(System.AppContext.BaseDirectory, "alfirdawsmanager_api.xml");
+    options.IncludeXmlComments(filePath);
 });
 builder.Services.AddCors(p => p.AddPolicy("CorsPolicy", build =>
 {

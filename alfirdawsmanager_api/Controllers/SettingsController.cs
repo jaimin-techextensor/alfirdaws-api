@@ -21,6 +21,10 @@ namespace alfirdawsmanager_api.Controllers
 
         #region Methods
 
+        /// <summary>
+        /// Retrieves the counters for all settings
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("counters")]
         public async Task<IActionResult> GetSettingsCounters()

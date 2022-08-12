@@ -15,16 +15,24 @@ namespace alfirdawsmanager.Service.Service
 {
     public class UserService : IUserInterface
     {
+        #region Members
+
         private readonly AlfirdawsManagerDbContext _context;
         static IHostingEnvironment _hostingEnvironment;
         private readonly IMapper _mapper;
+
+        #endregion
+
+        #region Constructors
 
         public UserService(AlfirdawsManagerDbContext context, IMapper mapper, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
             _mapper = mapper;
-            _hostingEnvironment= hostingEnvironment;
+            _hostingEnvironment = hostingEnvironment;
         }
+
+        #endregion
 
         #region Methods
 
@@ -32,14 +40,22 @@ namespace alfirdawsmanager.Service.Service
         /// GetUsersOverview
         /// </summary>
         /// <returns></returns>
-        public async Task<List<UserModel>> GetUsersOverview()
+        public async Task<List<User>> GetUsersOverview()
         {
             try
             {
-                var dataToReturn = new List<UserModel>();
+                var dataToReturn = new List<User>();
                 using (var repo = new RepositoryPattern<User>())
                 {
-                    dataToReturn = _mapper.Map<List<UserModel>>(repo.SelectAll().OrderByDescending(a => a.UserId).ToList());
+                    dataToReturn = _mapper.Map<List<User>>(repo.SelectAll().OrderByDescending(a => a.UserId).ToList());
+
+                    foreach (var item in dataToReturn)
+                    {
+                        if (item.Picture != null)
+                        {
+                            item.Picture = GetImage(Convert.ToBase64String(item.Picture));
+                        }
+                    }
                 }
                 return dataToReturn;
             }
@@ -53,20 +69,54 @@ namespace alfirdawsmanager.Service.Service
         /// SearchUsers
         /// </summary>
         /// <returns></returns>
-        public async Task<List<UserModel>> SearchUsers(string searchText)
+        public async Task<List<User>> SearchUsers(string searchText)
         {
             try
             {
-                var dataToReturn = new List<UserModel>();
+                var dataToReturn = new List<User>();
                 using (var repo = new RepositoryPattern<User>())
                 {
-                    dataToReturn = _mapper.Map<List<UserModel>>(repo.SelectAll().OrderByDescending(a => a.UserId)
-                                                                .Where(a=>
+                    dataToReturn = _mapper.Map<List<User>>(repo.SelectAll().OrderByDescending(a => a.UserId)
+                                                                .Where(a =>
                                                                            ((a.UserName != null) && (a.UserName.Contains(searchText)))
-                                                                        || ((a.Name !=null) && (a.Name.Contains(searchText))) 
-                                                                        || ((a.LastName != null) && (a.LastName.Contains(searchText))) 
+                                                                        || ((a.Name != null) && (a.Name.Contains(searchText)))
+                                                                        || ((a.LastName != null) && (a.LastName.Contains(searchText)))
                                                                         || ((a.Email != null) && (a.Email.Contains(searchText)))
                                                                        ).ToList());
+
+                    foreach (var item in dataToReturn)
+                    {
+                        if (item.Picture != null)
+                        {
+                            item.Picture = GetImage(Convert.ToBase64String(item.Picture));
+                        }
+                    }
+                }
+                return dataToReturn;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// GetUserById
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public async Task<User> GetUserById(int UserId)
+        {
+            try
+            {
+                var dataToReturn = new User();
+                using (var repo = new RepositoryPattern<User>())
+                {
+                    dataToReturn = _mapper.Map<User>(repo.SelectByID(UserId));
+                    if (dataToReturn.Picture != null)
+                    {
+                        dataToReturn.Picture = GetImage(Convert.ToBase64String(dataToReturn.Picture));
+                    }
                 }
                 return dataToReturn;
             }
@@ -90,13 +140,13 @@ namespace alfirdawsmanager.Service.Service
                 var objUserModel = new User();
                 //var objUserModel = _mapper.Map<User>(userModel);
                 objUserModel.UserName = userModel.UserName;
-                objUserModel.Password =PasswordEncryption.ToEncrypt(userModel.Password);
+                objUserModel.Password = PasswordEncryption.ToEncrypt(userModel.Password);
                 objUserModel.Name = userModel.Name;
                 objUserModel.LastName = userModel.LastName;
                 objUserModel.Picture = uniqueFileName;
                 objUserModel.Email = userModel.Email;
                 objUserModel.Active = userModel.Active;
-                objUserModel.LastLoginTime=DateTime.Now;
+                objUserModel.LastLoginTime = DateTime.Now;
                 objUserModel.SendActivationEmail = userModel.SendActivationEmail;
                 objUserModel.ChangePwdAtNextLogin = userModel.ChangePwdAtNextLogin;
 
@@ -167,7 +217,7 @@ namespace alfirdawsmanager.Service.Service
                 {
                     repo.Delete(UserId);
                     repo.Save();
-                    success=true;
+                    success = true;
                     return success;
                 }
             }
@@ -177,6 +227,11 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
+        /// <summary>
+        /// Image to Byte
+        /// </summary>
+        /// <param name="userModel"></param>
+        /// <returns></returns>
         private byte[] UploadFile(UserModel userModel)
         {
             //string uniqueFileName1 = null;
@@ -198,6 +253,21 @@ namespace alfirdawsmanager.Service.Service
                 //}
             }
             return Encoding.UTF8.GetBytes(base64String);
+        }
+
+        /// <summary>
+        /// Byte to Image
+        /// </summary>
+        /// <param name="sBase64String"></param>
+        /// <returns></returns>
+        public byte[] GetImage(string sBase64String)
+        {
+            byte[] bytes = null;
+            if (!string.IsNullOrEmpty(sBase64String))
+            {
+                bytes = Convert.FromBase64String(sBase64String);
+            }
+            return bytes;
         }
 
         #endregion

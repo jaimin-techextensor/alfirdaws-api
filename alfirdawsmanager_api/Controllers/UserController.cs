@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace alfirdawsmanager_api.Controllers
 {
-    [Route("api/user")]
+    [Route("api")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -16,13 +16,21 @@ namespace alfirdawsmanager_api.Controllers
 
         #endregion
 
+        #region Constructors
+
         public UserController(IUserInterface userInterface)
         {
             _userInterface = userInterface ?? throw new ArgumentNullException(nameof(userInterface));
         }
 
+        #endregion
+
         #region Methods
 
+        /// <summary>
+        /// Get overview of users
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("users")]
         public async Task<IActionResult> GetUsersOverview()
@@ -47,8 +55,13 @@ namespace alfirdawsmanager_api.Controllers
             }
         }
 
+        /// <summary>
+        /// Search users
+        /// </summary>
+        /// <param name="searchUsersRequest"></param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("searchUsers")]
+        [Route("users/search")]
         public async Task<IActionResult> SearchUsers([FromQuery]SearchUsersRequest searchUsersRequest)
         {
             try
@@ -71,9 +84,43 @@ namespace alfirdawsmanager_api.Controllers
             }
         }
 
+        /// <summary>
+        /// Get information of one user
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("users/{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            try
+            {
+                IActionResult response = null;
+                var result = await _userInterface.GetUserById(id);
+                if (result != null)
+                {
+                    return response = Ok(new { Success = true, Message = "Get user by Id retrieved", Data = result });
+                }
+                else
+                {
+                    return response = NotFound(new { Success = false, Message = "Could not retrieve user by Id" });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Create new user
+        /// </summary>
+        /// <param name="userModel"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("createUser")]
-        public IActionResult CreateUser([FromQuery]UserModel userModel)
+        [Route("users")]
+        public async Task<IActionResult> CreateUser([FromForm]UserModel userModel)
         {
             try
             {
@@ -98,9 +145,14 @@ namespace alfirdawsmanager_api.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("updateUser")]
-        public IActionResult UpdateUser([FromQuery] UserModel userModel)
+        /// <summary>
+        /// Update information of one user
+        /// </summary>
+        /// <param name="userModel"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("users")]
+        public async Task<IActionResult> UpdateUser([FromForm]UserModel userModel)
         {
             try
             {
@@ -126,14 +178,19 @@ namespace alfirdawsmanager_api.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("deleteUser")]
-        public IActionResult DeleteUser(int UserId)
+        /// <summary>
+        /// Delete user
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("users/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
         {
             try
             {
                 IActionResult response = null;
-                var result = _userInterface.DeleteUser(UserId);
+                var result = _userInterface.DeleteUser(id);
                 if (result == true)
                 {
                     return response = Ok(new { Success = true, Message = "User deleted successfully !!!" });
