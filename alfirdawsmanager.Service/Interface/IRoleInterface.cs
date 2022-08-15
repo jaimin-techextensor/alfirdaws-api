@@ -1,5 +1,6 @@
 ﻿using alfirdawsmanager.Data.Models;
 using alfirdawsmanager.Service.Models;
+using alfirdawsmanager.Service.Models.RequestModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ namespace alfirdawsmanager.Service.Interface
 {
     public interface IRoleInterface
     {
-        Task<List<Role>> GetRolesOverview();
-        Task<List<Role>> SearchRoles(string searchText);
-        Task<Role> GetRoleById(int RoleId);
-        bool CreateRole(RoleModel roleModel);
-        bool UpdateRole(RoleModel roleModel);
+        Task<List<RoleModel>> GetRolesOverview();
+        Task<List<RoleModel>> SearchRoles(string searchText);
+        Task<RoleModel> GetRoleById(int RoleId);
+        bool CreateRole(RoleCreateRequest roleModel);
+        bool UpdateRole(RoleUpdateRequest roleModel);
         bool DeleteRole(int roleId);
     }
 }

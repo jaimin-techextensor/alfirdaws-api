@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace alfirdawsmanager_api.Controllers
 {
     [Route("api")]
+    [ApiController]
     public class RoleController : Controller
     {
 
@@ -31,7 +32,7 @@ namespace alfirdawsmanager_api.Controllers
 
 
         /// <summary>
-        /// Retrieves the overview of the roles
+        /// Retrieves the overview of the roles including their permissions
         /// </summary>
         /// <returns>List of roles</returns>
         [HttpGet]
@@ -91,7 +92,7 @@ namespace alfirdawsmanager_api.Controllers
 
 
         /// <summary>
-        /// Gets information of one role
+        /// Gets information of one role including its permissions
         /// </summary>
         /// <param name="id">Unique id of the role</param>
         /// <returns>Role object</returns>
@@ -120,22 +121,22 @@ namespace alfirdawsmanager_api.Controllers
         }
 
         /// <summary>
-        /// Create new role
+        /// Create new role including the permissions
         /// </summary>
-        /// <param name="roleModel">Role object</param>
+        /// <param name="roleRequest">Role request object</param>
         /// <returns>Ok or Badrequest</returns>
         [HttpPost]
         [Route("roles")]
-        public async Task<IActionResult> CreateRole([FromForm] RoleModel roleModel)
+        public async Task<IActionResult> CreateRole( RoleCreateRequest roleRequest)
         {
             try
             {
                 IActionResult? response = null;
-                if (roleModel.Name == null || roleModel.IsStatic == null)
+                if (roleRequest.Name == null || roleRequest.IsStatic == null)
                 {
                     return response = BadRequest(new { Success = false, Message = "Please fill the required fields" });
                 }
-                var result =  _roleInterface.CreateRole(roleModel);
+                var result =  _roleInterface.CreateRole(roleRequest);
                 if (result == true)
                 {
                     return response = Ok(new { Success = true, Message = "Role created successfully !!!" });
@@ -152,22 +153,22 @@ namespace alfirdawsmanager_api.Controllers
         }
 
         /// <summary>
-        /// Updates the information of a role
+        /// Updates the information of a role including the permissions
         /// </summary>
-        /// <param name="roleModel"></param>
-        /// <returns></returns>
+        /// <param name="roleRequest">Role request opbject</param>
+        /// <returns>Ok or bad request</returns>
         [HttpPut]
         [Route("roles")]
-        public async Task<IActionResult> UpdateRole([FromForm] RoleModel roleModel)
+        public async Task<IActionResult> UpdateRole( RoleUpdateRequest roleRequest)
         {
             try
             {
                 IActionResult? response = null;
-                if (roleModel.Name == null || roleModel.IsStatic == null)
+                if (roleRequest.RoleId == null || roleRequest.Name == null || roleRequest.IsStatic == null)
                 {
-                    return response = BadRequest(new { Success = false, Message = "Please fill the required fields" });
+                    return response = BadRequest(new { Success = false, Message = "Please fill in the required fields" });
                 }
-                var result = _roleInterface.UpdateRole(roleModel);
+                var result = _roleInterface.UpdateRole(roleRequest);
                 if (result == true)
                 {
                     return response = Ok(new { Success = true, Message = "Role updated successfully !!!" });

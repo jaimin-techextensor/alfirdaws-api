@@ -6,6 +6,7 @@ using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Service;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,15 @@ builder.Services.AddSwaggerGen(options =>
                 new string[] {}
         }
     });
+
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1.0",
+        Title = "Alfirdawsmanager API",
+        Description = "An API to manage the complete Al.firdaws platform",
+
+    });
+
     var filePath = Path.Combine(System.AppContext.BaseDirectory, "alfirdawsmanager_api.xml");
     options.IncludeXmlComments(filePath);
 });
@@ -46,11 +56,14 @@ builder.Services.AddCors(p => p.AddPolicy("CorsPolicy", build =>
 {
 build.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
 }));
+
 builder.Services.AddScoped<AlfirdawsManagerDbContext, AlfirdawsManagerDbContext>();
 builder.Services.AddScoped<IAuthenticateInterface, AuthenticateService>();
 builder.Services.AddScoped<ISettingsInterface, SettingsService>();
 builder.Services.AddScoped<IUserInterface, UserService>();
 builder.Services.AddScoped<IRoleInterface, RoleService>();
+builder.Services.AddScoped<IModuleInterface, ModuleService>();
+
 var config = new MapperConfiguration(cfg =>
 {
     cfg.AddProfile(new AutomapperConfigurator());
