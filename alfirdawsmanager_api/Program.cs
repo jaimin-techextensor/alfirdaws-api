@@ -45,7 +45,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1.0",
         Title = "Alfirdawsmanager API",
-        Description = "An API to manage the complete Al.firdaws platform",
+        Description = "An API to manage the complete back-end of the Al.firdaws platform",
 
     });
 
@@ -63,6 +63,7 @@ builder.Services.AddScoped<ISettingsInterface, SettingsService>();
 builder.Services.AddScoped<IUserInterface, UserService>();
 builder.Services.AddScoped<IRoleInterface, RoleService>();
 builder.Services.AddScoped<IModuleInterface, ModuleService>();
+builder.Services.AddScoped<ICategoryInterface, CategoryService>();
 
 var config = new MapperConfiguration(cfg =>
 {

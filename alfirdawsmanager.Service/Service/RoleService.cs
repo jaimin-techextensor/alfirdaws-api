@@ -188,6 +188,7 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
+
         /// <summary>
         /// Creates a new role
         /// </summary>
@@ -233,6 +234,7 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
+
 
         /// <summary>
         /// Updates the information of a role
@@ -287,6 +289,7 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
+
 
         /// <summary>
         /// Deletes a specific role
