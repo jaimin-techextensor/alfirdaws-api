@@ -49,13 +49,13 @@ namespace alfirdawsmanager.Service.Service
                 {
                     dataToReturn = _mapper.Map<List<User>>(repo.SelectAll().OrderByDescending(a => a.UserId).ToList());
 
-                    foreach (var item in dataToReturn)
-                    {
-                        if (item.Picture != null)
-                        {
-                            item.Picture = GetImage(Convert.ToBase64String(item.Picture));
-                        }
-                    }
+                    //foreach (var item in dataToReturn)
+                    //{
+                    //    if (item.Picture != null)
+                    //    {
+                    //        //item.Picture = GetImage(Convert.ToBase64String(item.Picture));
+                    //    }
+                    //}
                 }
                 return dataToReturn;
             }
@@ -84,13 +84,13 @@ namespace alfirdawsmanager.Service.Service
                                                                         || ((a.Email != null) && (a.Email.Contains(searchText)))
                                                                        ).ToList());
 
-                    foreach (var item in dataToReturn)
-                    {
-                        if (item.Picture != null)
-                        {
-                            item.Picture = GetImage(Convert.ToBase64String(item.Picture));
-                        }
-                    }
+                    //foreach (var item in dataToReturn)
+                    //{
+                    //    if (item.Picture != null)
+                    //    {
+                    //        //item.Picture = GetImage(Convert.ToBase64String(item.Picture));
+                    //    }
+                    //}
                 }
                 return dataToReturn;
             }
@@ -113,13 +113,13 @@ namespace alfirdawsmanager.Service.Service
                 using (var repo = new RepositoryPattern<User>())
                 {
                     dataToReturn = _mapper.Map<User>(repo.SelectByID(UserId));
-                    if (dataToReturn != null)
-                    {
-                        if (dataToReturn.Picture != null)
-                        {
-                            dataToReturn.Picture = GetImage(Convert.ToBase64String(dataToReturn.Picture));
-                        }
-                    }
+                    //if (dataToReturn != null)
+                    //{
+                    //    if (dataToReturn.Picture != null)
+                    //    {
+                    //        //sdataToReturn.Picture = GetImage(Convert.ToBase64String(dataToReturn.Picture));
+                    //    }
+                    //}
                 }
                 return dataToReturn;
             }
@@ -139,14 +139,13 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 bool success = true;
-                byte[] uniqueFileName = null;// UploadFile(userModel);
+                string byteImage = UploadFile(userModel);
                 var objUserModel = new User();
-                //var objUserModel = _mapper.Map<User>(userModel);
                 objUserModel.UserName = userModel.UserName;
                 objUserModel.Password = PasswordEncryption.ToEncrypt(userModel.Password);
                 objUserModel.Name = userModel.Name;
                 objUserModel.LastName = userModel.LastName;
-                objUserModel.Picture = uniqueFileName;
+                objUserModel.Picture = byteImage;
                 objUserModel.Email = userModel.Email;
                 objUserModel.Active = userModel.Active;
                 objUserModel.LastLoginTime = DateTime.Now;
@@ -177,7 +176,7 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 bool success = true;
-                byte[] uniqueFileName = null;// UploadFile(userModel);
+                string byteImage = UploadFile(userModel);
                 var obj = _context.Users.Where(a => a.UserId == userModel.UserId).SingleOrDefault();
                 if (obj != null)
                 {
@@ -185,7 +184,7 @@ namespace alfirdawsmanager.Service.Service
                     obj.Password = PasswordEncryption.ToEncrypt(userModel.Password);
                     obj.Name = userModel.Name;
                     obj.LastName = userModel.LastName;
-                    obj.Picture = uniqueFileName;
+                    obj.Picture = byteImage;
                     obj.Email = userModel.Email;
                     obj.Active = userModel.Active;
                     obj.LastLoginTime = DateTime.Now;
@@ -240,27 +239,19 @@ namespace alfirdawsmanager.Service.Service
         /// </summary>
         /// <param name="userModel"></param>
         /// <returns></returns>
-        private byte[] UploadFile(UserModel userModel)
+        private string UploadFile(UserModel userModel)
         {
-            //string uniqueFileName1 = null;
             string base64String = null;
-
             if (userModel.Picture != null)
             {
-                MemoryStream ms = new MemoryStream();
-                //userModel.Picture.CopyTo(ms);
-                byte[] imageBytes = ms.ToArray();
-                base64String = Convert.ToBase64String(imageBytes);
-                //uniqueFileName = ms.ToArray().ToString();
-                //string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "ProfilePictures");
-                //uniqueFileName = Guid.NewGuid().ToString() + "_" + userModel.Picture.FileName;
-                //string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                //using (var fileStream = new FileStream(filePath, FileMode.Create))
-                //{
-                //    userModel.Picture.CopyTo(fileStream);
-                //}
+                using (var ms = new MemoryStream())
+                {
+                    userModel.Picture.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    base64String = Convert.ToBase64String(fileBytes);
+                }
             }
-            return Encoding.UTF8.GetBytes(base64String);
+            return base64String;
         }
 
         /// <summary>

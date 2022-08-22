@@ -1,11 +1,13 @@
 ﻿using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Models;
 using alfirdawsmanager.Service.Models.RequestModels;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace alfirdawsmanager_api.Controllers
 {
+    [EnableCors("CorsPolicy")]
     [Route("api")]
     [ApiController]
     public class UserController : ControllerBase
