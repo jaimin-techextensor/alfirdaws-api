@@ -122,7 +122,7 @@ namespace alfirdawsmanager_api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("users")]
-        public async Task<IActionResult> CreateUser([FromForm]UserModel userModel)
+        public async Task<IActionResult> CreateUser(UserModel userModel)
         {
             try
             {

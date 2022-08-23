@@ -139,13 +139,13 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 bool success = true;
-                string byteImage = UploadFile(userModel);
+               // string byteImage = UploadFile(userModel);
                 var objUserModel = new User();
                 objUserModel.UserName = userModel.UserName;
                 objUserModel.Password = PasswordEncryption.ToEncrypt(userModel.Password);
                 objUserModel.Name = userModel.Name;
                 objUserModel.LastName = userModel.LastName;
-                objUserModel.Picture = byteImage;
+                objUserModel.Picture = userModel.Picture;
                 objUserModel.Email = userModel.Email;
                 objUserModel.Active = userModel.Active;
                 objUserModel.LastLoginTime = DateTime.Now;
@@ -176,7 +176,7 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 bool success = true;
-                string byteImage = UploadFile(userModel);
+               // string byteImage = UploadFile(userModel);
                 var obj = _context.Users.Where(a => a.UserId == userModel.UserId).SingleOrDefault();
                 if (obj != null)
                 {
@@ -184,7 +184,7 @@ namespace alfirdawsmanager.Service.Service
                     obj.Password = PasswordEncryption.ToEncrypt(userModel.Password);
                     obj.Name = userModel.Name;
                     obj.LastName = userModel.LastName;
-                    obj.Picture = byteImage;
+                    obj.Picture = userModel.Picture;
                     obj.Email = userModel.Email;
                     obj.Active = userModel.Active;
                     obj.LastLoginTime = DateTime.Now;
@@ -239,20 +239,20 @@ namespace alfirdawsmanager.Service.Service
         /// </summary>
         /// <param name="userModel"></param>
         /// <returns></returns>
-        private string UploadFile(UserModel userModel)
-        {
-            string base64String = null;
-            if (userModel.Picture != null)
-            {
-                using (var ms = new MemoryStream())
-                {
-                    userModel.Picture.CopyTo(ms);
-                    var fileBytes = ms.ToArray();
-                    base64String = Convert.ToBase64String(fileBytes);
-                }
-            }
-            return base64String;
-        }
+        //private string UploadFile(UserModel userModel)
+        //{
+        //    string base64String = null;
+        //    if (userModel.Picture != null)
+        //    {
+        //        using (var ms = new MemoryStream())
+        //        {
+        //            userModel.Picture.CopyTo(ms);
+        //            var fileBytes = ms.ToArray();
+        //            base64String = Convert.ToBase64String(fileBytes);
+        //        }
+        //    }
+        //    return base64String;
+        //}
 
         /// <summary>
         /// Byte to Image
