@@ -17,6 +17,7 @@ namespace alfirdawsmanager.Service.Infrastructure
             CreateMap<Role, RoleModel>().ReverseMap(); //reverse so the both direction
             CreateMap<Module, ModuleModel>().ReverseMap(); //reverse so the both direction
             CreateMap<Permission, PermissionsModel>().ReverseMap(); //reverse so the both direction
+            CreateMap<Category, CategoryModel>().ReverseMap(); //reverse so the both direction
         }
     }
 }
