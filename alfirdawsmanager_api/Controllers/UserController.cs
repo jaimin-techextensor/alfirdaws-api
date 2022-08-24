@@ -4,6 +4,7 @@ using alfirdawsmanager.Service.Models.RequestModels;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace alfirdawsmanager_api.Controllers
 {
@@ -35,15 +36,24 @@ namespace alfirdawsmanager_api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("users")]
-        public async Task<IActionResult> GetUsersOverview()
+        public IActionResult GetUsersOverview([FromQuery] PageParamsRequestModel pageParamsRequestModel)
         {
             try
             {
                 IActionResult response = null;
-                var result = await _userInterface.GetUsersOverview();
+                var result =  _userInterface.GetUsersOverview(pageParamsRequestModel);
                 if (result != null)
                 {
-                    return response = Ok(new { Success = true, Message = "Retrieved users overview", Data = result });
+                    var metadata = new
+                    {
+                        result.TotalCount,
+                        result.PageSize,
+                        result.CurrentPage,
+                        result.TotalPages,
+                        result.HasNext,
+                        result.HasPrevious
+                    };
+                    return response = Ok(new { Success = true, Message = "Retrieved users overview", PageInfo= metadata, Data = result });
                 }
                 else
                 {

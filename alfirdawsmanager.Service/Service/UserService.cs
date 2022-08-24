@@ -3,6 +3,7 @@ using alfirdawsmanager.Data.Repository;
 using alfirdawsmanager.Service.Helpers.Security;
 using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Models;
+using alfirdawsmanager.Service.Models.RequestModels;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using System;
@@ -40,31 +41,25 @@ namespace alfirdawsmanager.Service.Service
         /// GetUsersOverview
         /// </summary>
         /// <returns></returns>
-        public async Task<List<User>> GetUsersOverview()
+        public PagedList<User> GetUsersOverview(PageParamsRequestModel pageParamsRequestModel)
         {
             try
             {
-                var dataToReturn = new List<User>();
                 using (var repo = new RepositoryPattern<User>())
                 {
-                    dataToReturn = _mapper.Map<List<User>>(repo.SelectAll().OrderByDescending(a => a.UserId).ToList());
+                    var dataToReturn = PagedList<User>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.UserId).AsQueryable(),
+                    pageParamsRequestModel.PageNumber,
+                    pageParamsRequestModel.PageSize);
 
-                    //foreach (var item in dataToReturn)
-                    //{
-                    //    if (item.Picture != null)
-                    //    {
-                    //        //item.Picture = GetImage(Convert.ToBase64String(item.Picture));
-                    //    }
-                    //}
+                    return dataToReturn;
                 }
-                return dataToReturn;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
+           
         }
-
         /// <summary>
         /// SearchUsers
         /// </summary>

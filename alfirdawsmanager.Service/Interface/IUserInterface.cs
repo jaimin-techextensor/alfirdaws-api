@@ -1,5 +1,6 @@
 ﻿using alfirdawsmanager.Data.Models;
 using alfirdawsmanager.Service.Models;
+using alfirdawsmanager.Service.Models.RequestModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace alfirdawsmanager.Service.Interface
 {
     public interface IUserInterface
     {
-        Task<List<User>> GetUsersOverview();
+        PagedList<User> GetUsersOverview(PageParamsRequestModel pageParamsRequestModel);
         Task<List<User>> SearchUsers(string searchText);
         Task<User> GetUserById(int UserId);
         bool CreateUser(UserModel userModel);
