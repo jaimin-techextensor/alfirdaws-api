@@ -185,6 +185,133 @@ namespace alfirdawsmanager_api.Controllers
         }
 
 
+
+        /// <summary>
+        /// Gets the overview of subcategories for a given category 
+        /// </summary>
+        /// <param name="id">Unique id of the category</param>
+        /// <returns>List of subcategories</returns>
+        [HttpGet]
+        [Route("categories/{id}/subcategories")]
+        public async Task<IActionResult> GetSubCategories(int id)
+        {
+            try
+            {
+                IActionResult? response = null;
+                var result = await _categoryInterface.GetSubCategories(id);
+                if (result != null)
+                {
+                    return response = Ok(new { Success = true, Message = "Get subcategories for category retrieved", Data = result });
+                }
+                else
+                {
+                    return response = NotFound(new { Success = false, Message = "Could not retrieve subcategories for given category" });
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
+        /// <summary>
+        /// Creates a new Subcategory for a specific category
+        /// </summary>
+        /// <param name="id">The id of category for which the subcategory is created</param>
+        /// <param name="subCatRequest">The subcategory request</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("categories/{id}/subcategories")]
+        public async Task<IActionResult> CreateSubCategory(int id, SubCategoryCreateRequest subCatRequest)
+        {
+            try
+            {
+                IActionResult? response = null;
+                if (subCatRequest.Name == null)
+                {
+                    return response = BadRequest(new { Success = false, Message = "Please fill in the required fields" });
+                }
+                var result = _categoryInterface.CreateSubCategory(id, subCatRequest);
+                if (result == true)
+                {
+                    return response = Ok(new { Success = true, Message = "SubCategory created successfully !!!" });
+                }
+                else
+                {
+                    return response = BadRequest(new { Success = false, Message = "Something went wrong" });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="catRequest"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("categories/{id}/subcategories")]
+        public async Task<IActionResult> UpdateSubCategory(int id, SubCategoryUpdateRequest subCatRequest)
+        {
+            try
+            {
+                IActionResult? response = null;
+                if (subCatRequest.SubCategoryId == 0)
+                {
+                    return response = BadRequest(new { Success = false, Message = "Please fill in the required fields" });
+                }
+                var result = _categoryInterface.UpdateSubCategory(id, subCatRequest);
+                if (result == true)
+                {
+                    return response = Ok(new { Success = true, Message = "Category updated successfully !!!" });
+                }
+                else
+                {
+                    return response = BadRequest(new { Success = false, Message = "Something went wrong" });
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Deletes a specific subcategory
+        /// </summary>
+        /// <param name="id">The unique id of the subcategory</param>
+        /// <returns>Ok or bad request</returns>
+        [HttpDelete]
+        [Route("categories/subcategories/{id}")]
+        public async Task<IActionResult> DeleteSubCategory(int id)
+        {
+            try
+            {
+                IActionResult? response = null;
+                var result = _categoryInterface.DeleteSubCategory(id);
+                if (result == true)
+                {
+                    return response = Ok(new { Success = true, Message = "SubCategory deleted successfully !!!" });
+                }
+                else
+                {
+                    return response = NotFound(new { Success = false, Message = "Something went wrong" });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
 

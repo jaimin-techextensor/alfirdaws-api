@@ -46,6 +46,7 @@ namespace alfirdawsmanager.Service.Service
                         catModel.Sequence = category.Sequence;
                         catModel.Icon = category.Icon;
                         catModel.Active = category.Active;
+                        ///Todo: count of subcategories does not work here, needs to be changed
                         catModel.CountSubcategories = category.SubCategories.Count();
 
                         dataToReturn.Add(catModel);
@@ -173,6 +174,132 @@ namespace alfirdawsmanager.Service.Service
                     }
                 }
                 return success;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves all the subcategories for a specific category
+        /// </summary>
+        /// <param name="categoryId">The unique category id</param>
+        /// <returns>List of subcategories</returns>
+        public Task<List<SubCategoryModel>> GetSubCategories(int categoryId)
+        {
+            try
+            {
+                var dataToReturn = new List<SubCategoryModel>();
+
+                using (var repo = new RepositoryPattern<SubCategory>())
+                {
+                    dataToReturn = _mapper.Map <List<SubCategoryModel>> (repo.SelectAll()
+                                                                             .Where(s => s.CategoryId == categoryId)
+                                                                             .OrderBy(c => c.Sequence)
+                                                                             .ToList()
+                                                                        );
+                    return Task.FromResult(dataToReturn);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Create a new subcategory 
+        /// </summary>
+        /// <param name="subCatRequest">The subcategory request</param>
+        /// <returns>Boolean indication if the creation was successfull</returns>
+        public bool CreateSubCategory(int categoryId, SubCategoryCreateRequest subCatRequest)
+        {
+            try
+            {
+                bool success = false;
+
+                var objSubCat = new SubCategory();
+                objSubCat.CategoryId = categoryId;
+                objSubCat.Name = subCatRequest.Name;
+                objSubCat.Sequence = subCatRequest.Sequence;
+                objSubCat.Icon = subCatRequest.Icon;
+                objSubCat.Active = subCatRequest.Active;
+
+                using (var repo = new RepositoryPattern<SubCategory>())
+                {
+                    repo.Insert(objSubCat);
+                    repo.Save();
+                    success = true;
+                }
+                return success;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Updates a subcategory for a specific category
+        /// </summary>
+        /// <param name="categoryId">The id of the category </param>
+        /// <param name="subCatRequest">The category update request</param>
+        /// <returns>Boolean indication if the update was successfull or not</returns>
+        public bool UpdateSubCategory(int categoryId, SubCategoryUpdateRequest subCatRequest)
+        {
+            try
+            {
+                bool success = false;
+
+                var objSubCat = _context.SubCategories.Where(a => a.SubCategoryId == subCatRequest.SubCategoryId).SingleOrDefault();
+                if (objSubCat != null)
+                {
+                    objSubCat.CategoryId = categoryId;
+                    if (subCatRequest.Name != null) objSubCat.Name = subCatRequest.Name;
+                    if (subCatRequest.Icon != null) objSubCat.Icon = subCatRequest.Icon;
+                    if (subCatRequest.Sequence != 0) objSubCat.Sequence = subCatRequest.Sequence;
+                    if (subCatRequest.Active != null) objSubCat.Active = subCatRequest.Active;
+
+                    using (var repo = new RepositoryPattern<SubCategory>())
+                    {
+                        repo.Update(objSubCat);
+                        repo.Save();
+                        success = true;
+                    }
+                }
+                return success;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Delete a subcategory 
+        /// </summary>
+        /// <param name="subcategoryId">Unique id of the subcategory</param>
+        /// <returns>Boolean indication if the deletion was succesfull or not</returns>
+        public bool DeleteSubCategory(int subcategoryId)
+        {
+            try
+            {
+                bool success = false;
+                using (var repo = new RepositoryPattern<SubCategory>())
+                {
+                    var objSubCat = _mapper.Map<SubCategory>(repo.SelectByID(subcategoryId));
+                    if (objSubCat != null)
+                    {
+                        repo.Delete(objSubCat);
+                        repo.Save();
+                        success = true;
+                    }
+                    return success;
+                }
             }
             catch (Exception)
             {
