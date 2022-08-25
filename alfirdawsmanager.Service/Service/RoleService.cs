@@ -292,7 +292,7 @@ namespace alfirdawsmanager.Service.Service
 
 
         /// <summary>
-        /// Deletes a specific role
+        /// Deletes a specific role with all its permissions
         /// </summary>
         /// <param name="roleId">The unique id of the role that needs to be updated</param>
         /// <returns>Indication if the role was successfully deleted or not</returns>
@@ -301,11 +301,24 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 bool success = false;
+                var p_repo = new RepositoryPattern<Permission>();
+
                 using (var repo = new RepositoryPattern<Role>())
                 {
                     var objRole = _mapper.Map<Role>(repo.SelectByID(roleId));
+
                     if (objRole != null)
                     {
+                        var permissions = p_repo.SelectAll().Where(p => p.RoleId == roleId).ToList();
+                        if (permissions != null)
+                        {   
+                            foreach(var perm in permissions)
+                            {
+                                p_repo.Delete(perm.PermissionId);
+                                p_repo.Save();
+                            }
+                        }
+
                         repo.Delete(roleId);
                         repo.Save();
                         success = true;
