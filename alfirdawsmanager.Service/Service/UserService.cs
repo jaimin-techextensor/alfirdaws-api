@@ -58,7 +58,7 @@ namespace alfirdawsmanager.Service.Service
             {
                 throw;
             }
-           
+
         }
         /// <summary>
         /// SearchUsers
@@ -112,7 +112,7 @@ namespace alfirdawsmanager.Service.Service
                     {
                         if (dataToReturn.Password != null)
                         {
-                             dataToReturn.Password = PasswordEncryption.DecodeFrom64(dataToReturn.Password);
+                            dataToReturn.Password = PasswordEncryption.DecodeFrom64(dataToReturn.Password);
                         }
                     }
                 }
@@ -134,7 +134,7 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 bool success = true;
-               // string byteImage = UploadFile(userModel);
+                // string byteImage = UploadFile(userModel);
                 var objUserModel = new User();
                 objUserModel.UserName = userModel.UserName;
                 objUserModel.Password = PasswordEncryption.EncodePasswordToBase64(userModel.Password);
@@ -171,7 +171,7 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 bool success = true;
-               // string byteImage = UploadFile(userModel);
+                // string byteImage = UploadFile(userModel);
                 var obj = _context.Users.Where(a => a.UserId == userModel.UserId).SingleOrDefault();
                 if (obj != null)
                 {
@@ -212,10 +212,41 @@ namespace alfirdawsmanager.Service.Service
                 bool success = true;
                 using (var repo = new RepositoryPattern<User>())
                 {
-                    var res= _mapper.Map<User>(repo.SelectByID(UserId));
-                    if (res != null) 
-                    { 
+                    var res = _mapper.Map<User>(repo.SelectByID(UserId));
+                    if (res != null)
+                    {
                         repo.Delete(UserId);
+                        repo.Save();
+                        success = true;
+                        return success;
+                    }
+                    return success = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// ActivateDeactivateUser
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="isActive"></param>
+        /// <returns></returns>
+        public bool ActivateDeactivateUser(int id, bool isActive)
+        {
+            try
+            {
+                bool success = true;
+                using (var repo = new RepositoryPattern<User>())
+                {
+                    var res = _mapper.Map<User>(repo.SelectByID(id));
+                    res.Active = isActive;
+                    if (res != null)
+                    {
+                        repo.Update(res);
                         repo.Save();
                         success = true;
                         return success;

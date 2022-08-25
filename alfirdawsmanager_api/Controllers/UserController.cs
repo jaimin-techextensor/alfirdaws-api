@@ -41,7 +41,7 @@ namespace alfirdawsmanager_api.Controllers
             try
             {
                 IActionResult response = null;
-                var result =  _userInterface.GetUsersOverview(pageParamsRequestModel);
+                var result = _userInterface.GetUsersOverview(pageParamsRequestModel);
                 if (result != null)
                 {
                     var metadata = new
@@ -53,7 +53,7 @@ namespace alfirdawsmanager_api.Controllers
                         result.HasNext,
                         result.HasPrevious
                     };
-                    return response = Ok(new { Success = true, Message = "Retrieved users overview", PageInfo= metadata, Data = result });
+                    return response = Ok(new { Success = true, Message = "Retrieved users overview", PageInfo = metadata, Data = result });
                 }
                 else
                 {
@@ -74,7 +74,7 @@ namespace alfirdawsmanager_api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("users/search")]
-        public async Task<IActionResult> SearchUsers([FromQuery]SearchUsersRequest searchUsersRequest)
+        public async Task<IActionResult> SearchUsers([FromQuery] SearchUsersRequest searchUsersRequest)
         {
             try
             {
@@ -137,7 +137,7 @@ namespace alfirdawsmanager_api.Controllers
             try
             {
                 IActionResult response = null;
-                if(userModel.UserName==null || userModel.Name==null || userModel.LastName==null || userModel.Email ==null || userModel.Password == null)
+                if (userModel.UserName == null || userModel.Name == null || userModel.LastName == null || userModel.Email == null || userModel.Password == null)
                 {
                     return response = BadRequest(new { Success = false, Message = "Please fill the required fields" });
                 }
@@ -206,6 +206,35 @@ namespace alfirdawsmanager_api.Controllers
                 if (result == true)
                 {
                     return response = Ok(new { Success = true, Message = "User deleted successfully !!!" });
+                }
+                else
+                {
+                    return response = NotFound(new { Success = false, Message = "Something went wrong" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Active / De Active User
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="isActive"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("activateDeactivateUser")]
+        public async Task<IActionResult> ActivateDeactivateUser(int id, bool isActive)
+        {
+            try
+            {
+                IActionResult response = null;
+                var result = _userInterface.ActivateDeactivateUser(id, isActive);
+                if (result == true)
+                {
+                    return response = Ok(new { Success = true, Message = "User updated successfully !!!" });
                 }
                 else
                 {

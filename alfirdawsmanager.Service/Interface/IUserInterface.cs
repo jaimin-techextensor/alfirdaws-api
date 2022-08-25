@@ -17,5 +17,6 @@ namespace alfirdawsmanager.Service.Interface
         bool CreateUser(UserModel userModel);
         bool UpdateUser(UserModel userModel);
         bool DeleteUser(int UserId);
+        bool ActivateDeactivateUser(int id, bool isActive);
     }
 }
