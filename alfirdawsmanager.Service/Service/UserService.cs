@@ -108,13 +108,13 @@ namespace alfirdawsmanager.Service.Service
                 using (var repo = new RepositoryPattern<User>())
                 {
                     dataToReturn = _mapper.Map<User>(repo.SelectByID(UserId));
-                    //if (dataToReturn != null)
-                    //{
-                    //    if (dataToReturn.Picture != null)
-                    //    {
-                    //        //sdataToReturn.Picture = GetImage(Convert.ToBase64String(dataToReturn.Picture));
-                    //    }
-                    //}
+                    if (dataToReturn != null)
+                    {
+                        if (dataToReturn.Password != null)
+                        {
+                             dataToReturn.Password = PasswordEncryption.DecodeFrom64(dataToReturn.Password);
+                        }
+                    }
                 }
                 return dataToReturn;
             }
@@ -137,7 +137,7 @@ namespace alfirdawsmanager.Service.Service
                // string byteImage = UploadFile(userModel);
                 var objUserModel = new User();
                 objUserModel.UserName = userModel.UserName;
-                objUserModel.Password = PasswordEncryption.ToEncrypt(userModel.Password);
+                objUserModel.Password = PasswordEncryption.EncodePasswordToBase64(userModel.Password);
                 objUserModel.Name = userModel.Name;
                 objUserModel.LastName = userModel.LastName;
                 objUserModel.Picture = userModel.Picture;
@@ -176,7 +176,7 @@ namespace alfirdawsmanager.Service.Service
                 if (obj != null)
                 {
                     obj.UserName = userModel.UserName;
-                    obj.Password = PasswordEncryption.ToEncrypt(userModel.Password);
+                    obj.Password = PasswordEncryption.EncodePasswordToBase64(userModel.Password);
                     obj.Name = userModel.Name;
                     obj.LastName = userModel.LastName;
                     obj.Picture = userModel.Picture;

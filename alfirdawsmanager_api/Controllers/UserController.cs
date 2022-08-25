@@ -164,7 +164,7 @@ namespace alfirdawsmanager_api.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("users")]
-        public async Task<IActionResult> UpdateUser([FromForm]UserModel userModel)
+        public async Task<IActionResult> UpdateUser(UserModel userModel)
         {
             try
             {
