@@ -106,7 +106,7 @@ namespace alfirdawsmanager.Service.Service
                     var objCat = _mapper.Map<Category>(repo.SelectByID(categoryId));
                     if (objCat != null)
                     {
-                        repo.Delete(objCat);
+                        repo.Delete(categoryId);
                         repo.Save();
                         success = true;
                     }
@@ -294,7 +294,7 @@ namespace alfirdawsmanager.Service.Service
                     var objSubCat = _mapper.Map<SubCategory>(repo.SelectByID(subcategoryId));
                     if (objSubCat != null)
                     {
-                        repo.Delete(objSubCat);
+                        repo.Delete(objSubCat.SubCategoryId);
                         repo.Save();
                         success = true;
                     }

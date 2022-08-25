@@ -19,9 +19,9 @@ namespace alfirdawsmanager.Data.Repository
 
         }
 
-        public void Delete(object id)
+        public void Delete(int id)
         {
-            if(id != null && table != null)
+            if(id > 0 && table != null)
             {
                 T existing = table.Find(id);
                 if (existing != null)

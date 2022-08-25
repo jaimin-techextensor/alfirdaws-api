@@ -12,7 +12,7 @@ namespace alfirdawsmanager.Data.Interface
         T SelectByID(object id);
         void Insert(T obj);
         void Update(T obj);
-        void Delete(object id);
+        void Delete(int id);
         void Save();
         void InsertOrUpdate(T obj, int id);
     }
