@@ -11,7 +11,7 @@ namespace alfirdawsmanager.Service.Interface
 {
     public interface IRoleInterface
     {
-        Task<List<RoleModel>> GetRolesOverview();
+        Task<PagedList<RoleModel>> GetRolesOverview(PageParamsRequestModel pageParamsRequestModel);
         Task<List<RoleModel>> SearchRoles(string searchText);
         Task<RoleModel> GetRoleById(int RoleId);
         bool CreateRole(RoleCreateRequest roleModel);

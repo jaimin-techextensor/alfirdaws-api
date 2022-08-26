@@ -28,7 +28,7 @@ namespace alfirdawsmanager.Service.Service
         /// Retrives all the roles with their associated permissions within the platform
         /// </summary>
         /// <returns>List of Roles</returns>
-        public Task<List<RoleModel>> GetRolesOverview()
+        public Task<PagedList<RoleModel>> GetRolesOverview(PageParamsRequestModel pageParamsRequestModel)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace alfirdawsmanager.Service.Service
 
                 using (var repo = new RepositoryPattern<Role>())
                 {
-                    List<Role> roles = repo.SelectAll().OrderBy(a => a.RoleId).ToList();
+                    List<Role> roles = (repo.SelectAll().OrderBy(a => a.RoleId).ToList());
 
                     foreach (var role in roles)
                     {
@@ -80,7 +80,9 @@ namespace alfirdawsmanager.Service.Service
                         dataToReturn.Add(roleModel);
 
                     }
-                    return Task.FromResult(dataToReturn);
+
+                    return Task.FromResult(PagedList<RoleModel>.ToPagedList(dataToReturn.AsQueryable(), pageParamsRequestModel.PageNumber,
+                        pageParamsRequestModel.PageSize));
                 }
             }
             catch (Exception)

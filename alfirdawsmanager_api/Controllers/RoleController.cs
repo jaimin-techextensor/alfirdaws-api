@@ -37,15 +37,25 @@ namespace alfirdawsmanager_api.Controllers
         /// <returns>List of roles</returns>
         [HttpGet]
         [Route("roles")]
-        public async Task<IActionResult> GetRolesOverview()
+        public async Task<IActionResult> GetRolesOverview([FromQuery] PageParamsRequestModel pageParamsRequestModel)
         {
             try
             {
                 IActionResult? response = null;
-                var result = await _roleInterface.GetRolesOverview();
+                var result = await _roleInterface.GetRolesOverview(pageParamsRequestModel);
+
                 if (result != null)
                 {
-                    return response = Ok(new { Success = true, Message = "Retrieved roles overview", Data = result });
+                    var metadata = new
+                    {
+                        result.TotalCount,
+                        result.PageSize,
+                        result.CurrentPage,
+                        result.TotalPages,
+                        result.HasNext,
+                        result.HasPrevious
+                    };
+                    return response = Ok(new { Success = true, Message = "Retrieved roles overview", PageInfo = metadata, Data = result });
                 }
                 else
                 {

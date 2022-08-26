@@ -42,7 +42,7 @@ namespace alfirdawsmanager.Service.Service
                 {
                     return null;
                 }
-                if (dataToReturn.Password ==PasswordEncryption.ToEncrypt(Password))
+                if (dataToReturn.Password ==PasswordEncryption.EncodePasswordToBase64(Password))
                 {
                     dataToReturn.LastLoginTime = DateTime.Now;
                     using (var repo = new RepositoryPattern<User>())
