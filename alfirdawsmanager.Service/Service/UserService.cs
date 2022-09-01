@@ -6,6 +6,7 @@ using alfirdawsmanager.Service.Models;
 using alfirdawsmanager.Service.Models.RequestModels;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -100,6 +101,7 @@ namespace alfirdawsmanager.Service.Service
         /// </summary>
         /// <param name="UserId"></param>
         /// <returns></returns>
+        /*
         public async Task<User> GetUserById(int UserId)
         {
             try
@@ -107,15 +109,65 @@ namespace alfirdawsmanager.Service.Service
                 var dataToReturn = new User();
                 using (var repo = new RepositoryPattern<User>())
                 {
-                    dataToReturn = _mapper.Map<User>(repo.SelectByID(UserId));
-                    if (dataToReturn != null)
+                    var user = _mapper.Map<User>(repo.SelectByID(UserId));
+                    if (user != null)
                     {
-                        if (dataToReturn.Password != null)
+                        dataToReturn = user;
+                        if (user.Password != null)
                         {
-                            dataToReturn.Password = PasswordEncryption.DecodeFrom64(dataToReturn.Password);
+                            dataToReturn.Password = PasswordEncryption.DecodeFrom64(user.Password);
+                        }
+
+                    }
+                }
+                return dataToReturn;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        */
+
+
+        public async Task<UserModelResponse> GetUserById(int UserId)
+        {
+            try
+            {
+                var dataToReturn = new UserModelResponse();
+
+                var a_repo = new RepositoryPattern<AssignedRole>();
+                var r_repo = new RepositoryPattern<Role>();
+
+                using (var repo = new RepositoryPattern<User>())
+                {
+                    var user = _mapper.Map<UserModelResponse>(repo.SelectByID(UserId));
+                    if (user != null)
+                    {
+                        dataToReturn = user;
+                        if (user.Password != null)
+                        {
+                            dataToReturn.Password = PasswordEncryption.DecodeFrom64(user.Password);
+                        }
+
+                        var assignedroles = a_repo.SelectAll().Where(a => a.UserId == user.UserId);
+                        if(assignedroles != null)
+                        {
+                            dataToReturn.AssignedRoles = new List<AssignedRoles>();
+                            foreach (var assignedRole in assignedroles)
+                            {
+                                var role = r_repo.SelectAll().Where(r => r.RoleId == assignedRole.RoleId).SingleOrDefault();
+                                if(role != null)
+                                {
+                                    AssignedRoles assignedRoles = new AssignedRoles { Name = role.Name, RoleId = role.RoleId };
+                                    dataToReturn.AssignedRoles.Add(assignedRoles);
+                                }
+                            }
                         }
                     }
                 }
+
+
                 return dataToReturn;
             }
             catch (Exception ex)
@@ -194,7 +246,7 @@ namespace alfirdawsmanager.Service.Service
                 }
                 return success;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -223,7 +275,7 @@ namespace alfirdawsmanager.Service.Service
                     return success = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -234,7 +286,7 @@ namespace alfirdawsmanager.Service.Service
         /// </summary>
         /// <param name="id"></param>
         /// <param name="isActive"></param>
-        /// <returns></returns>
+        /// <returns>>Returns success or failuer boolean</returns>
         public bool ActivateDeactivateUser(int id, bool isActive)
         {
             try
@@ -259,6 +311,68 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
+
+        /// <summary>
+        /// Assign a role to a specific user
+        /// </summary>
+        /// <param name="userId">The unique id of the user</param>
+        /// <param name="roleId">The unique id of the role</param>
+        /// <returns>Returns success or failuer boolean</returns>
+        public bool AssignRole (int userId, int roleId)
+        {
+            try
+            {
+                bool success = false;
+
+                var assignedRole = new AssignedRole();
+                assignedRole.UserId = userId;
+                assignedRole.RoleId = roleId;
+
+                using (var repo = new RepositoryPattern<AssignedRole>())
+                {
+                    repo.Insert(assignedRole);
+                    repo.Save();
+                    success = true;
+                }
+                return success;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        /// <summary>
+        /// Removes a role for a specific user
+        /// </summary>
+        /// <param name="userId">The unique id of the user</param>
+        /// <param name="roleId">The unique id of the role</param>
+        /// <returns>Returns success or failuer boolean</returns>
+        public bool RemoveRole(int userId, int roleId)
+        {
+            try
+            {
+                bool success = false;
+
+                using (var repo = new RepositoryPattern<AssignedRole>())
+                {
+                    var res = _mapper.Map<AssignedRole>(repo.SelectAll().Where(r => r.RoleId == roleId && r.UserId == userId).SingleOrDefault());
+                    if (res != null)
+                    {
+                        repo.Delete(res.AssignedRoleId);
+                        repo.Save();
+                        success = true;
+                    }
+                }
+                return success;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
 
         /// <summary>
         /// Image to Byte

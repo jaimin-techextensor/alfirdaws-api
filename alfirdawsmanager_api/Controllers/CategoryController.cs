@@ -285,6 +285,39 @@ namespace alfirdawsmanager_api.Controllers
             }
         }
 
+
+
+        /// <summary>
+        /// Gets a specific subcategory
+        /// </summary>
+        /// <param name="id">Unique id of the subcategory</param>
+        /// <returns>Subcategory object</returns>
+        [HttpGet]
+        [Route("categories/subcategories/{id}")]
+        public async Task<IActionResult> GetSubCategoryById(int id)
+        {
+            try
+            {
+                IActionResult? response = null;
+                var result = await _categoryInterface.GetSubCategoryById(id);
+                if (result != null)
+                {
+                    return response = Ok(new { Success = true, Message = "Get subcategory retrieved", Data = result });
+                }
+                else
+                {
+                    return response = NotFound(new { Success = false, Message = "Could not retrieve subcategory" });
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
         /// <summary>
         /// Deletes a specific subcategory
         /// </summary>

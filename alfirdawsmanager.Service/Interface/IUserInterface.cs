@@ -13,10 +13,12 @@ namespace alfirdawsmanager.Service.Interface
     {
         PagedList<User> GetUsersOverview(PageParamsRequestModel pageParamsRequestModel);
         Task<List<User>> SearchUsers(string searchText);
-        Task<User> GetUserById(int UserId);
+        Task<UserModelResponse> GetUserById(int UserId);
         bool CreateUser(UserModel userModel);
         bool UpdateUser(UserModel userModel);
         bool DeleteUser(int UserId);
         bool ActivateDeactivateUser(int id, bool isActive);
+        bool AssignRole(int userId, int roleId);
+        bool RemoveRole(int userId, int roleId);
     }
 }

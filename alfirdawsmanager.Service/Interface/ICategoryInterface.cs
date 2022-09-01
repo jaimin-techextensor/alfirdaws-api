@@ -13,6 +13,7 @@ namespace alfirdawsmanager.Service.Interface
         bool DeleteCategory(int categoryId);
 
         Task<List<SubCategoryModel>> GetSubCategories(int categoryId);
+        Task<SubCategoryModel> GetSubCategoryById(int subcategoryId);
         bool CreateSubCategory(int categoryId, SubCategoryCreateRequest subCatRequest);
         bool UpdateSubCategory(int categoryId, SubCategoryUpdateRequest subCatRequest);
         bool DeleteSubCategory(int subcategoryId);
