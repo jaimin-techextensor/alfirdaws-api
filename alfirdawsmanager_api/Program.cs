@@ -64,6 +64,7 @@ builder.Services.AddScoped<IUserInterface, UserService>();
 builder.Services.AddScoped<IRoleInterface, RoleService>();
 builder.Services.AddScoped<IModuleInterface, ModuleService>();
 builder.Services.AddScoped<ICategoryInterface, CategoryService>();
+builder.Services.AddScoped<ICountryInterface, CountryService>();
 
 var config = new MapperConfiguration(cfg =>
 {

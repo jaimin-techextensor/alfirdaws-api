@@ -13,7 +13,7 @@ namespace alfirdawsmanager.Service.Models.RequestModels
 
         private int _pageSize = 10;
 
-        public string SearchText { get; set; }
+        public string? SearchText { get; set; }
         public int PageSize
         {
             get
