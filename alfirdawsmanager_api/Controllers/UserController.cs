@@ -68,35 +68,6 @@ namespace alfirdawsmanager_api.Controllers
         }
 
         /// <summary>
-        /// Search users
-        /// </summary>
-        /// <param name="searchUsersRequest"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("users/search")]
-        public async Task<IActionResult> SearchUsers([FromQuery] SearchUsersRequest searchUsersRequest)
-        {
-            try
-            {
-                IActionResult response = null;
-                var result = await _userInterface.SearchUsers(searchUsersRequest.SearchText);
-                if (result != null)
-                {
-                    return response = Ok(new { Success = true, Message = "Searched users retrieved", Data = result });
-                }
-                else
-                {
-                    return response = NotFound(new { Success = false, Message = "Could not retrieve searched users" });
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
         /// Get information of one user
         /// </summary>
         /// <param name="UserId">Unique id of the user</param>
@@ -120,17 +91,17 @@ namespace alfirdawsmanager_api.Controllers
                             name = result.Name + ' ' + result.LastName,
                             email = result.Email,
                             picture = result.Picture,
-                            status = result.Active==true? "online": "not-visible",
+                            status = result.Active == true ? "online" : "not-visible",
 
                         };
 
-                        return response = Ok(new {User});
+                        return response = Ok(new { User });
                     }
                     else
                     {
                         return response = Ok(new { Success = true, Message = "Get user by Id retrieved", Data = result });
                     }
-                   
+
                 }
                 else
                 {

@@ -6,12 +6,6 @@ using alfirdawsmanager.Service.Models;
 using alfirdawsmanager.Service.Models.RequestModels;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace alfirdawsmanager.Service.Service
 {
@@ -20,18 +14,16 @@ namespace alfirdawsmanager.Service.Service
         #region Members
 
         private readonly AlfirdawsManagerDbContext _context;
-        static IHostingEnvironment _hostingEnvironment;
         private readonly IMapper _mapper;
 
         #endregion
 
         #region Constructors
 
-        public UserService(AlfirdawsManagerDbContext context, IMapper mapper, IHostingEnvironment hostingEnvironment)
+        public UserService(AlfirdawsManagerDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _hostingEnvironment = hostingEnvironment;
         }
 
         #endregion
@@ -48,47 +40,21 @@ namespace alfirdawsmanager.Service.Service
             {
                 using (var repo = new RepositoryPattern<User>())
                 {
-                    var dataToReturn = PagedList<User>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.UserId).AsQueryable(),
-                    pageParamsRequestModel.PageNumber,
-                    pageParamsRequestModel.PageSize);
-
-                    return dataToReturn;
+                    if (!string.IsNullOrEmpty(pageParamsRequestModel.SearchText) && pageParamsRequestModel.SearchText != "null")
+                    {
+                        var dataToReturn = PagedList<User>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.UserId).Where(a => (
+                                                                           ((a.UserName != null) && (a.UserName.Contains(pageParamsRequestModel.SearchText)))
+                                                                        || ((a.Name != null) && (a.Name.Contains(pageParamsRequestModel.SearchText)))
+                                                                        || ((a.Email != null) && (a.Email.Contains(pageParamsRequestModel.SearchText))))).AsQueryable()
+                                                                       , pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+                        return dataToReturn;
+                    }
+                    else
+                    {
+                        var dataToReturn = PagedList<User>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.UserId).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+                        return dataToReturn;
+                    }
                 }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
-        /// <summary>
-        /// SearchUsers
-        /// </summary>
-        /// <returns></returns>
-        public async Task<List<User>> SearchUsers(string searchText)
-        {
-            try
-            {
-                var dataToReturn = new List<User>();
-                using (var repo = new RepositoryPattern<User>())
-                {
-                    dataToReturn = _mapper.Map<List<User>>(repo.SelectAll().OrderByDescending(a => a.UserId)
-                                                                .Where(a =>
-                                                                           ((a.UserName != null) && (a.UserName.Contains(searchText)))
-                                                                        || ((a.Name != null) && (a.Name.Contains(searchText)))
-                                                                        || ((a.LastName != null) && (a.LastName.Contains(searchText)))
-                                                                        || ((a.Email != null) && (a.Email.Contains(searchText)))
-                                                                       ).ToList());
-
-                    //foreach (var item in dataToReturn)
-                    //{
-                    //    if (item.Picture != null)
-                    //    {
-                    //        //item.Picture = GetImage(Convert.ToBase64String(item.Picture));
-                    //    }
-                    //}
-                }
-                return dataToReturn;
             }
             catch (Exception ex)
             {
@@ -151,7 +117,7 @@ namespace alfirdawsmanager.Service.Service
                         }
 
                         var assignedroles = a_repo.SelectAll().Where(a => a.UserId == user.UserId);
-                        if(assignedroles != null)
+                       if(assignedroles != null)
                         {
                             dataToReturn.AssignedRoles = new List<AssignedRoles>();
                             foreach (var assignedRole in assignedroles)
