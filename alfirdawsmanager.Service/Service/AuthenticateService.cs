@@ -42,7 +42,7 @@ namespace alfirdawsmanager.Service.Service
                 {
                     return null;
                 }
-                if (dataToReturn.Password ==PasswordEncryption.EncodePasswordToBase64(Password))
+                if (dataToReturn.Password == PasswordEncryption.EncodePasswordToBase64(Password))
                 {
                     dataToReturn.LastLoginTime = DateTime.Now;
                     using (var repo = new RepositoryPattern<User>())
@@ -81,7 +81,7 @@ namespace alfirdawsmanager.Service.Service
                 else
                 {
                     string token = Guid.NewGuid().ToString();
-                    string activationUrl = "http://techext-001-site50.itempurl.com/reset-password?email=" + dataToReturn.Email+"&token="+ token;
+                    string activationUrl = "http://techext-001-site50.itempurl.com/reset-password?email=" + dataToReturn.Email + "&token=" + token;
                     ActivationEmail.SendActivationEmail(Email, activationUrl);
 
                     dataToReturn.SendActivationEmail = true;
@@ -90,7 +90,7 @@ namespace alfirdawsmanager.Service.Service
                         repo.Update(dataToReturn);
                         repo.Save();
                     }
-;                    return dataToReturn;
+; return dataToReturn;
                 }
             }
             catch (Exception ex)
@@ -105,7 +105,7 @@ namespace alfirdawsmanager.Service.Service
         /// <param name="Email"></param>
         /// <param name="Password"></param>
         /// <returns></returns>
-        public async Task<User> ResetPassword(string Email,string Password)
+        public async Task<User> ResetPassword(string Email, string Password)
         {
             try
             {

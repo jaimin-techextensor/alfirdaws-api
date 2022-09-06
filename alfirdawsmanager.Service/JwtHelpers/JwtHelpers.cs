@@ -59,6 +59,7 @@ namespace alfirdawsmanager.Service.JwtHelpers
                 UserToken.Email = model.Email;
                 UserToken.UserName = model.UserName;
                 UserToken.Id = model.Id;
+                UserToken.Picture = model.Picture;
                 //UserToken.GuidId = Id;
                 return UserToken;
             }
