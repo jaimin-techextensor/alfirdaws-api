@@ -8,7 +8,7 @@ using AutoMapper;
 
 namespace alfirdawsmanager.Service.Service
 {
-    public class RoleService: IRoleInterface
+    public class RoleService : IRoleInterface
     {
 
         #region Members
@@ -39,7 +39,20 @@ namespace alfirdawsmanager.Service.Service
 
                 using (var repo = new RepositoryPattern<Role>())
                 {
-                    List<Role> roles = (repo.SelectAll().OrderBy(a => a.RoleId).ToList());
+                    List<Role> roles = new List<Role>();
+                    if (!string.IsNullOrEmpty(pageParamsRequestModel.SearchText) && pageParamsRequestModel.SearchText != "null")
+                    {
+                        roles = PagedList<Role>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.RoleId)
+                                                                    .Where(a =>
+                                                                                ((a.Name != null) && (a.Name.Contains(pageParamsRequestModel.SearchText)))
+                                                                             || ((a.Description != null) && (a.Description.Contains(pageParamsRequestModel.SearchText)))
+                                                                   ).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+                    }
+                    else
+                    {
+                        roles = (repo.SelectAll().OrderBy(a => a.RoleId).ToList());
+
+                    }
 
                     foreach (var role in roles)
                     {
@@ -54,7 +67,7 @@ namespace alfirdawsmanager.Service.Service
                         {
                             List<Permission> permissions = p_repo.SelectAll().Where(p => p.RoleId == role.RoleId).OrderBy(p => p.PermissionId).ToList();
 
-                            foreach(var perm in permissions)
+                            foreach (var perm in permissions)
                             {
                                 PermissionsModel permModel = new PermissionsModel();
                                 permModel.PermissionId = perm.PermissionId;
@@ -63,10 +76,10 @@ namespace alfirdawsmanager.Service.Service
                                 permModel.Update = perm.Update;
                                 permModel.Delete = perm.Delete;
 
-                                using ( m_repo)
+                                using (m_repo)
                                 {
                                     var module = m_repo.SelectAll().SingleOrDefault(m => m.ModuleId == perm.ModuleId);
-                                    if(module != null)
+                                    if (module != null)
                                     {
                                         permModel.ModuleId = module.ModuleId;
                                         permModel.ModuleName = module.Name;
@@ -76,7 +89,7 @@ namespace alfirdawsmanager.Service.Service
                                 roleModel.Permissions.Add(permModel);
                             }
                         }
-                              
+
                         dataToReturn.Add(roleModel);
 
                     }
@@ -91,18 +104,18 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
-       
+
 
         /// <summary>
         /// Returns a specific role based on the given RoleId
         /// </summary>
         /// <param name="RoleId">The unique id of the role</param>
         /// <returns>A Role object</returns>
-        public  Task<RoleModel> GetRoleById(int RoleId)
+        public Task<RoleModel> GetRoleById(int RoleId)
         {
             try
             {
-                var dataToReturn = new RoleModel() ;
+                var dataToReturn = new RoleModel();
 
                 var p_repo = new RepositoryPattern<Permission>();
                 var m_repo = new RepositoryPattern<Module>();
@@ -110,7 +123,7 @@ namespace alfirdawsmanager.Service.Service
                 using (var repo = new RepositoryPattern<Role>())
                 {
                     var role = repo.SelectByID(RoleId);
-                    if(role != null)
+                    if (role != null)
                     {
                         RoleModel roleModel = new RoleModel();
                         roleModel.RoleId = role.RoleId;
@@ -160,36 +173,6 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
-      
-        /// <summary>
-        /// Searches for a specific role based on the search text
-        /// </summary>
-        /// <param name="searchText">Text to be searched for</param>
-        /// <returns>List of roles which match the search criteria</returns>
-        public  Task<List<RoleModel>> SearchRoles(string searchText)
-        {
-            try
-            {
-                var dataToReturn = new List<RoleModel>();
-                if(searchText != null && searchText != String.Empty)
-                {
-                    using (var repo = new RepositoryPattern<Role>())
-                    {
-                        dataToReturn = _mapper.Map<List<RoleModel>>(repo.SelectAll().OrderByDescending(a => a.RoleId)
-                                                                    .Where(a =>
-                                                                                ((a.Name != null) && (a.Name.Contains(searchText)))
-                                                                             || ((a.Description != null) && (a.Description.Contains(searchText))                                                                        )                                                                      
-                                                                   ).ToList());
-                    }
-                }
-                return Task.FromResult(dataToReturn);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
 
         /// <summary>
         /// Creates a new role
@@ -207,7 +190,7 @@ namespace alfirdawsmanager.Service.Service
                 objRole.Description = roleModel.Description;
                 objRole.IsStatic = roleModel.IsStatic;
 
-                if(roleModel.Permissions !=  null)
+                if (roleModel.Permissions != null)
                 {
                     objRole.Permissions = new List<Permission>();
                     foreach (var perm in roleModel.Permissions)
@@ -222,7 +205,7 @@ namespace alfirdawsmanager.Service.Service
                         objRole.Permissions.Add(permission);
                     }
                 }
-                   
+
                 using (var repo = new RepositoryPattern<Role>())
                 {
                     repo.Insert(objRole);
@@ -248,7 +231,7 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 bool success = false;
-               
+
                 var objRole = _context.Roles.Where(a => a.RoleId == roleModel.RoleId).SingleOrDefault();
                 if (objRole != null)
                 {
@@ -256,13 +239,13 @@ namespace alfirdawsmanager.Service.Service
                     objRole.Description = roleModel.Description;
                     objRole.IsStatic = roleModel.IsStatic;
 
-                    if(roleModel.Permissions != null)
+                    if (roleModel.Permissions != null)
                     {
                         objRole.Permissions = new List<Permission>();
                         foreach (var perm in roleModel.Permissions)
                         {
                             Permission permission = new Permission();
-                            if(perm.PermissionId != null)
+                            if (perm.PermissionId != null)
                             {
                                 permission.PermissionId = (int)perm.PermissionId;
                             }
@@ -313,8 +296,8 @@ namespace alfirdawsmanager.Service.Service
                     {
                         var permissions = p_repo.SelectAll().Where(p => p.RoleId == roleId).ToList();
                         if (permissions != null)
-                        {   
-                            foreach(var perm in permissions)
+                        {
+                            foreach (var perm in permissions)
                             {
                                 p_repo.Delete(perm.PermissionId);
                                 p_repo.Save();

@@ -68,39 +68,6 @@ namespace alfirdawsmanager_api.Controllers
             }
         }
 
-       
-
-
-        /// <summary>
-        /// Searches for a specific role
-        /// </summary>
-        /// <param name="searchRequest">The search text</param>
-        /// <returns>List of roles</returns>
-        [HttpGet]
-        [Route("roles/search")]
-        public async Task<IActionResult> SearchRoles([FromQuery] SearchRequest searchRequest)
-        {
-            try
-            {
-                IActionResult? response = null;
-                var result = await _roleInterface.SearchRoles(searchRequest.SearchText);
-                if (result != null)
-                {
-                    return response = Ok(new { Success = true, Message = "Searched roles retrieved", Data = result });
-                }
-                else
-                {
-                    return response = NotFound(new { Success = false, Message = "Could not retrieve searched roles" });
-                }
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-
         /// <summary>
         /// Gets information of one role including its permissions
         /// </summary>
