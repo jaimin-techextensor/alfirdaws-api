@@ -38,6 +38,7 @@ namespace alfirdawsmanager.Service.Models
             get;
             set;
         }
+        public string Picture { get; set; }
         //public Guid GuidId
         //{
         //    get;

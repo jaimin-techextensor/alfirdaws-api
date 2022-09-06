@@ -49,6 +49,7 @@ namespace alfirdawsmanager_api.Controllers
                         Email = result.Email,
                         UserName = result.UserName,
                         Id = result.UserId,
+                        Picture = result.Picture
                     }, jwtSettings);
                 }
                 else
