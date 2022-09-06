@@ -43,9 +43,9 @@ namespace alfirdawsmanager.Service.Service
                     if (!string.IsNullOrEmpty(pageParamsRequestModel.SearchText) && pageParamsRequestModel.SearchText != "null")
                     {
                         var dataToReturn = PagedList<User>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.UserId).Where(a => (
-                                                                           ((a.UserName != null) && (a.UserName.Contains(pageParamsRequestModel.SearchText)))
-                                                                        || ((a.Name != null) && (a.Name.Contains(pageParamsRequestModel.SearchText)))
-                                                                        || ((a.Email != null) && (a.Email.Contains(pageParamsRequestModel.SearchText))))).AsQueryable()
+                                                                           ((a.UserName != null) && (a.UserName.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase)))
+                                                                        || ((a.Name != null) && (a.Name.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase)))
+                                                                        || ((a.Email != null) && (a.Email.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase))))).AsQueryable()
                                                                        , pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
                         return dataToReturn;
                     }

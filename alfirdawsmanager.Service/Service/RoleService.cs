@@ -44,8 +44,8 @@ namespace alfirdawsmanager.Service.Service
                     {
                         roles = PagedList<Role>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.RoleId)
                                                                     .Where(a =>
-                                                                                ((a.Name != null) && (a.Name.Contains(pageParamsRequestModel.SearchText)))
-                                                                             || ((a.Description != null) && (a.Description.Contains(pageParamsRequestModel.SearchText)))
+                                                                                ((a.Name != null) && (a.Name.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase)))
+                                                                             || ((a.Description != null) && (a.Description.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase)))
                                                                    ).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
                     }
                     else
