@@ -153,9 +153,9 @@ namespace alfirdawsmanager.Service.Service
                 var country = _context.Countries.Where(c => c.CountryId == countryId).SingleOrDefault();
                 if (country != null)
                 {
-                    if (country.Name != null) country.Name = countryReq.Name;
-                    if (country.Icon != null) country.Icon = countryReq.Icon;
-                    if (country.Active != null) country.Active = countryReq.Active;
+                    if (countryReq.Name != null) country.Name = countryReq.Name;
+                    if (countryReq.Icon != null) country.Icon = countryReq.Icon;
+                    if (countryReq.Active != null) country.Active = countryReq.Active;
 
                     using (var repo = new RepositoryPattern<Country>())
                     {
