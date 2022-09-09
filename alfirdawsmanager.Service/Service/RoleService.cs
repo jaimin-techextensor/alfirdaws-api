@@ -134,7 +134,7 @@ namespace alfirdawsmanager.Service.Service
 
                         using (p_repo)
                         {
-                            List<Permission> permissions = p_repo.SelectAll().Where(p => p.RoleId == role.RoleId).OrderBy(p => p.PermissionId).ToList();
+                            List<Permission> permissions = p_repo.SelectAll().Where(p => p.RoleId == RoleId).OrderBy(p => p.PermissionId).ToList();
 
                             foreach (var perm in permissions)
                             {
@@ -190,7 +190,7 @@ namespace alfirdawsmanager.Service.Service
                 objRole.Description = roleModel.Description;
                 objRole.IsStatic = roleModel.IsStatic;
 
-                if (roleModel.Permissions != null)
+                if (roleModel.Permissions != null && roleModel.Permissions.Count > 0)
                 {
                     objRole.Permissions = new List<Permission>();
                     foreach (var perm in roleModel.Permissions)
@@ -239,7 +239,7 @@ namespace alfirdawsmanager.Service.Service
                     objRole.Description = roleModel.Description;
                     objRole.IsStatic = roleModel.IsStatic;
 
-                    if (roleModel.Permissions != null)
+                    if (roleModel.Permissions != null && roleModel.Permissions.Count > 0)
                     {
                         objRole.Permissions = new List<Permission>();
                         foreach (var perm in roleModel.Permissions)
@@ -260,12 +260,8 @@ namespace alfirdawsmanager.Service.Service
                         }
                     }
 
-                    using (var repo = new RepositoryPattern<Role>())
-                    {
-                        repo.Update(objRole);
-                        repo.Save();
-                        success = true;
-                    }
+                    _context.SaveChanges();
+                    success = true;
                 }
                 return success;
             }
