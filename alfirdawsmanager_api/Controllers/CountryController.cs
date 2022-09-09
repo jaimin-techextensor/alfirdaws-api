@@ -175,6 +175,101 @@ namespace alfirdawsmanager_api.Controllers
         }
 
 
+        /// <summary>
+        /// Creates a region for a specific country
+        /// </summary>
+        /// <param name="id">The unique id of the country</param>
+        /// <param name="regionReq">The region informatioin</param>
+        /// <returns>Success or failure result</returns>
+        [HttpPost]
+        [Route("countries/{id}/regions")]
+        public async Task<IActionResult> CreateRegion(int id, RegionRequest regionReq)
+        {
+            try
+            {
+                IActionResult? response = null;
+                if (regionReq.Name == null)
+                {
+                    return response = BadRequest(new { Success = false, Message = "Please fill in the required fields" });
+                }
+                var result = _countryInterface.CreateRegion(id, regionReq);
+                if (result == true)
+                {
+                    return response = Ok(new { Success = true, Message = "Region created successfully !!!" });
+                }
+                else
+                {
+                    return response = BadRequest(new { Success = false, Message = "Something went wrong" });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Updates the information of a specific region
+        /// </summary>
+        /// <param name="id">The unique id of the country</param>
+        /// <param name="regionId">The unique id of the region</param>
+        /// <param name="regionRequest">The region information</param>
+        /// <returns>Success or failure result</returns>
+        [HttpPut]
+        [Route("countries/{id}/regions/{regionId}")]
+        public async Task<IActionResult> UpdateRegion(int id, int regionId, RegionRequest regionRequest)
+        {
+            try
+            {
+                IActionResult? response = null;
+                if (regionRequest.Name == null)
+                {
+                    return response = BadRequest(new { Success = false, Message = "Please fill in the required fields" });
+                }
+                var result = _countryInterface.UpdateRegion(id, regionId, regionRequest);
+                if (result == true)
+                {
+                    return response = Ok(new { Success = true, Message = "Region updated successfully !!!" });
+                }
+                else
+                {
+                    return response = BadRequest(new { Success = false, Message = "Something went wrong" });
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Deletes a specific region
+        /// </summary>
+        /// <param name="id">Unique id of the region</param>
+        /// <returns>Success or failure result</returns>
+        [HttpDelete]
+        [Route("countries/regions/{id}")]
+        public async Task<IActionResult> DeleteRegion(int id)
+        {
+            try
+            {
+                IActionResult? response = null;
+                var result = _countryInterface.DeleteRegion(id);
+                if (result == true)
+                {
+                    return response = Ok(new { Success = true, Message = "Region deleted successfully !!!" });
+                }
+                else
+                {
+                    return response = NotFound(new { Success = false, Message = "Something went wrong" });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
 

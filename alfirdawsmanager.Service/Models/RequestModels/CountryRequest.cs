@@ -9,5 +9,9 @@ namespace alfirdawsmanager.Service.Models.RequestModels
         public bool? Active { get; set; }
     }
 
+    public class RegionRequest
+    {
+        public string? Name { get; set; }
+    }
 }
 

@@ -97,10 +97,28 @@ namespace alfirdawsmanager.Service.Service
                                                         Active = c.Active,
                                                         Icon = c.Icon,
                                                         Name = c.Name,
-                                                        CountRegions = c.Regions.Count()
+                                                        CountRegions = c.Regions.Count(),
+                                                        Regions = new List<RegionModel>()
+
                                                     }
                                                     ).SingleOrDefault();
+                if(countrymodel != null)
+                { 
+                    List<Region> regions = _context.Regions.Where(r => r.CountryId == countryId).ToList();
+                    if(regions != null)
+                    {
+                        foreach (var reg in regions)
+                        {
+                            var regionmodel = new RegionModel
+                            {
+                                Name = reg.Name,
+                                RegionId = reg.RegionId
 
+                            };
+                            countrymodel.Regions.Add(regionmodel);
+                        }
+                    }
+                }
                 return Task.FromResult(countrymodel);
             }
             catch (Exception)
@@ -153,9 +171,9 @@ namespace alfirdawsmanager.Service.Service
                 var country = _context.Countries.Where(c => c.CountryId == countryId).SingleOrDefault();
                 if (country != null)
                 {
-                    if (country.Name != null) country.Name = countryReq.Name;
-                    if (country.Icon != null) country.Icon = countryReq.Icon;
-                    if (country.Active != null) country.Active = countryReq.Active;
+                    if (countryReq.Name != null) country.Name = countryReq.Name;
+                    if (countryReq.Icon != null) country.Icon = countryReq.Icon;
+                    if (countryReq.Active != null) country.Active = countryReq.Active;
 
                     using (var repo = new RepositoryPattern<Country>())
                     {
@@ -165,6 +183,97 @@ namespace alfirdawsmanager.Service.Service
                     }
                 }
                 return success;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Creates a new region for a specific country
+        /// </summary>
+        /// <param name="countryId">The unique id of the country</param>
+        /// <param name="regionReq">The region information</param>
+        /// <returns>Boolean indication if the creation was successful or not</returns>
+        public bool CreateRegion(int countryId, RegionRequest regionReq)
+        {
+            try
+            {
+                bool success = false;
+
+                var region = new Region();
+                region.Name = regionReq.Name;
+                region.CountryId = countryId;
+
+                using (var repo = new RepositoryPattern<Region>())
+                {
+                    repo.Insert(region);
+                    repo.Save();
+                    success = true;
+                }
+                return success;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Updates a specific region of a country
+        /// </summary>
+        /// <param name="countryId">The unique id of the country</param>
+        /// <param name="regionId">The unique id of the region</param>
+        /// <param name="regionRequest">The region object</param>
+        /// <returns>boolean indication if the update was successfull or not</returns>
+        public bool UpdateRegion(int countryId, int regionId, RegionRequest regionRequest)
+        {
+
+            bool success = false;
+            try
+            {
+                var region = _context.Regions.Where(r => r.RegionId == regionId && r.CountryId == countryId).SingleOrDefault();
+                if (region != null)
+                {
+                    region.Name = regionRequest.Name;
+
+                    using (var repo = new RepositoryPattern<Region>())
+                    {
+                        repo.Update(region);
+                        repo.Save();
+                        success = true;
+                    }
+                }
+                return success;
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Removes a specific region of a country
+        /// </summary>
+        /// <param name="regionId">The unique id of the region</param>
+        /// <returns>Boolean indication if the deletion of the region was successful</returns>
+        public bool DeleteRegion(int regionId)
+        {
+            try
+            {
+                bool success = false;
+                using (var repo = new RepositoryPattern<Region>())
+                {
+                    var region = _mapper.Map<Region>(repo.SelectByID(regionId));
+                    if (region != null)
+                    {
+                        repo.Delete(regionId);
+                        repo.Save();
+                        success = true;
+                    }
+                    return success;
+                }
             }
             catch (Exception)
             {

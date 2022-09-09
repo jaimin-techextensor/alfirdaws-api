@@ -11,6 +11,10 @@ namespace alfirdawsmanager.Service.Interface
         bool CreateCountry(CountryRequest countryReq);
         bool UpdateCountry(int countryId, CountryRequest countryReq);
         bool DeleteCountry(int countryId);
+
+        bool CreateRegion(int countryId, RegionRequest regionReq);
+        bool UpdateRegion(int countryId, int regionId, RegionRequest regionRequest);
+        bool DeleteRegion(int regionId);
     }
 }
 
