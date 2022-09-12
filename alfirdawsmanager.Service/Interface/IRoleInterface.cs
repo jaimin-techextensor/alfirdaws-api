@@ -11,11 +11,12 @@ namespace alfirdawsmanager.Service.Interface
 {
     public interface IRoleInterface
     {
-        Task<PagedList<RoleModel>> GetRolesOverview(PageParamsRequestModel pageParamsRequestModel);
-        Task<RoleModel> GetRoleById(int RoleId);
+       PagedList<Role> GetRolesOverview(PageParamsRequestModel pageParamsRequestModel);
+        RoleModel GetRoleById(int RoleId);
         bool CreateRole(RoleCreateRequest roleModel);
         bool UpdateRole(RoleUpdateRequest roleModel);
         bool DeleteRole(int roleId);
+        List<RoleModel> GetRolePermissionByUser(int userId);
     }
 }
 

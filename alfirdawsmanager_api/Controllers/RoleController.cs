@@ -37,12 +37,12 @@ namespace alfirdawsmanager_api.Controllers
         /// <returns>List of roles</returns>
         [HttpGet]
         [Route("roles")]
-        public async Task<IActionResult> GetRolesOverview([FromQuery] PageParamsRequestModel pageParamsRequestModel)
+        public IActionResult GetRolesOverview([FromQuery] PageParamsRequestModel pageParamsRequestModel)
         {
             try
             {
                 IActionResult? response = null;
-                var result = await _roleInterface.GetRolesOverview(pageParamsRequestModel);
+                var result = _roleInterface.GetRolesOverview(pageParamsRequestModel);
 
                 if (result != null)
                 {
@@ -75,12 +75,12 @@ namespace alfirdawsmanager_api.Controllers
         /// <returns>Role object</returns>
         [HttpGet]
         [Route("roles/{id}")]
-        public async Task<IActionResult> GetRoleById(int id)
+        public IActionResult GetRoleById(int id)
         {
             try
             {
                 IActionResult? response = null;
-                var result = await _roleInterface.GetRoleById(id);
+                var result = _roleInterface.GetRoleById(id);
                 if (result != null)
                 {
                     return response = Ok(new { Success = true, Message = "Get role by Id retrieved", Data = result });
@@ -104,7 +104,7 @@ namespace alfirdawsmanager_api.Controllers
         /// <returns>Ok or Badrequest</returns>
         [HttpPost]
         [Route("roles")]
-        public async Task<IActionResult> CreateRole( RoleCreateRequest roleRequest)
+        public async Task<IActionResult> CreateRole(RoleCreateRequest roleRequest)
         {
             try
             {
@@ -113,7 +113,7 @@ namespace alfirdawsmanager_api.Controllers
                 {
                     return response = BadRequest(new { Success = false, Message = "Please fill the required fields" });
                 }
-                var result =  _roleInterface.CreateRole(roleRequest);
+                var result = _roleInterface.CreateRole(roleRequest);
                 if (result == true)
                 {
                     return response = Ok(new { Success = true, Message = "Role created successfully !!!" });
@@ -136,7 +136,7 @@ namespace alfirdawsmanager_api.Controllers
         /// <returns>Ok or bad request</returns>
         [HttpPut]
         [Route("roles")]
-        public async Task<IActionResult> UpdateRole( RoleUpdateRequest roleRequest)
+        public async Task<IActionResult> UpdateRole(RoleUpdateRequest roleRequest)
         {
             try
             {
@@ -179,6 +179,29 @@ namespace alfirdawsmanager_api.Controllers
                 if (result == true)
                 {
                     return response = Ok(new { Success = true, Message = "Role deleted successfully !!!" });
+                }
+                else
+                {
+                    return response = NotFound(new { Success = false, Message = "Something went wrong" });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("role-permission/{userId}")]
+        public IActionResult GetRolePermissionByUser(int userId)
+        {
+            try
+            {
+                IActionResult? response = null;
+                var result = _roleInterface.GetRolePermissionByUser(userId);
+                if (result != null)
+                {
+                    return response = Ok(new { Success = true, Message = "Role permission retrived successful !!!", Data = result });
                 }
                 else
                 {

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Data;
 using alfirdawsmanager.Data.Models;
 using alfirdawsmanager.Data.Repository;
 using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Models;
 using alfirdawsmanager.Service.Models.RequestModels;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace alfirdawsmanager.Service.Service
 {
@@ -28,7 +30,7 @@ namespace alfirdawsmanager.Service.Service
         /// Retrives all the roles with their associated permissions within the platform
         /// </summary>
         /// <returns>List of Roles</returns>
-        public Task<PagedList<RoleModel>> GetRolesOverview(PageParamsRequestModel pageParamsRequestModel)
+        public PagedList<Role> GetRolesOverview(PageParamsRequestModel pageParamsRequestModel)
         {
             try
             {
@@ -42,7 +44,7 @@ namespace alfirdawsmanager.Service.Service
                     List<Role> roles = new List<Role>();
                     if (!string.IsNullOrEmpty(pageParamsRequestModel.SearchText) && pageParamsRequestModel.SearchText != "null")
                     {
-                        roles = PagedList<Role>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.RoleId)
+                        return PagedList<Role>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.RoleId)
                                                                     .Where(a =>
                                                                                 ((a.Name != null) && (a.Name.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase)))
                                                                              || ((a.Description != null) && (a.Description.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase)))
@@ -50,52 +52,9 @@ namespace alfirdawsmanager.Service.Service
                     }
                     else
                     {
-                        roles = (repo.SelectAll().OrderBy(a => a.RoleId).ToList());
+                        return PagedList<Role>.ToPagedList(repo.SelectAll().OrderBy(a => a.RoleId).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
 
                     }
-
-                    foreach (var role in roles)
-                    {
-                        RoleModel roleModel = new RoleModel();
-                        roleModel.RoleId = role.RoleId;
-                        roleModel.Name = role.Name;
-                        roleModel.Description = role.Description;
-                        roleModel.IsStatic = role.IsStatic;
-                        roleModel.Permissions = new List<PermissionsModel>();
-
-                        using (p_repo)
-                        {
-                            List<Permission> permissions = p_repo.SelectAll().Where(p => p.RoleId == role.RoleId).OrderBy(p => p.PermissionId).ToList();
-
-                            foreach (var perm in permissions)
-                            {
-                                PermissionsModel permModel = new PermissionsModel();
-                                permModel.PermissionId = perm.PermissionId;
-                                permModel.Create = perm.Create;
-                                permModel.Read = perm.Read;
-                                permModel.Update = perm.Update;
-                                permModel.Delete = perm.Delete;
-
-                                using (m_repo)
-                                {
-                                    var module = m_repo.SelectAll().SingleOrDefault(m => m.ModuleId == perm.ModuleId);
-                                    if (module != null)
-                                    {
-                                        permModel.ModuleId = module.ModuleId;
-                                        permModel.ModuleName = module.Name;
-                                    }
-                                }
-
-                                roleModel.Permissions.Add(permModel);
-                            }
-                        }
-
-                        dataToReturn.Add(roleModel);
-
-                    }
-
-                    return Task.FromResult(PagedList<RoleModel>.ToPagedList(dataToReturn.AsQueryable(), pageParamsRequestModel.PageNumber,
-                        pageParamsRequestModel.PageSize));
                 }
             }
             catch (Exception)
@@ -111,61 +70,52 @@ namespace alfirdawsmanager.Service.Service
         /// </summary>
         /// <param name="RoleId">The unique id of the role</param>
         /// <returns>A Role object</returns>
-        public Task<RoleModel> GetRoleById(int RoleId)
+        public RoleModel GetRoleById(int RoleId)
         {
             try
             {
                 var dataToReturn = new RoleModel();
 
-                var p_repo = new RepositoryPattern<Permission>();
-                var m_repo = new RepositoryPattern<Module>();
-
-                using (var repo = new RepositoryPattern<Role>())
+                var role = _context.Roles.Where(a => a.RoleId == RoleId).Include(a => a.Permissions).FirstOrDefault();
+                if (role != null)
                 {
-                    var role = repo.SelectByID(RoleId);
-                    if (role != null)
-                    {
-                        RoleModel roleModel = new RoleModel();
-                        roleModel.RoleId = role.RoleId;
-                        roleModel.Name = role.Name;
-                        roleModel.Description = role.Description;
-                        roleModel.IsStatic = role.IsStatic;
-                        roleModel.Permissions = new List<PermissionsModel>();
+                    RoleModel roleModel = new RoleModel();
+                    roleModel.RoleId = role.RoleId;
+                    roleModel.Name = role.Name;
+                    roleModel.Description = role.Description;
+                    roleModel.IsStatic = role.IsStatic;
+                    roleModel.Permissions = new List<PermissionsModel>();
 
-                        using (p_repo)
+                    if (role.Permissions != null && role.Permissions.Count > 0)
+                    {
+                        List<Permission> permissions = role.Permissions.OrderBy(p => p.PermissionId).ToList();
+
+                        foreach (var perm in permissions)
                         {
-                            List<Permission> permissions = p_repo.SelectAll().Where(p => p.RoleId == RoleId).OrderBy(p => p.PermissionId).ToList();
+                            PermissionsModel permModel = new PermissionsModel();
+                            permModel.PermissionId = perm.PermissionId;
+                            permModel.Create = perm.Create;
+                            permModel.Read = perm.Read;
+                            permModel.Update = perm.Update;
+                            permModel.Delete = perm.Delete;
 
-                            foreach (var perm in permissions)
+                            var module = _context.Modules.SingleOrDefault(m => m.ModuleId == perm.ModuleId);
+                            if (module != null)
                             {
-                                PermissionsModel permModel = new PermissionsModel();
-                                permModel.PermissionId = perm.PermissionId;
-                                permModel.Create = perm.Create;
-                                permModel.Read = perm.Read;
-                                permModel.Update = perm.Update;
-                                permModel.Delete = perm.Delete;
-
-                                using (m_repo)
-                                {
-                                    var module = m_repo.SelectAll().SingleOrDefault(m => m.ModuleId == perm.ModuleId);
-                                    if (module != null)
-                                    {
-                                        permModel.ModuleId = module.ModuleId;
-                                        permModel.ModuleName = module.Name;
-                                    }
-                                }
-
-                                roleModel.Permissions.Add(permModel);
+                                permModel.ModuleId = module.ModuleId;
+                                permModel.ModuleName = module.Name;
                             }
+
+                            roleModel.Permissions.Add(permModel);
                         }
-                        dataToReturn = roleModel;
                     }
-                    else
-                    {
-                        dataToReturn = null;
-                    }
+                    dataToReturn = roleModel;
                 }
-                return Task.FromResult(dataToReturn);
+                else
+                {
+                    dataToReturn = null;
+                }
+                return dataToReturn;
             }
             catch (Exception)
             {
@@ -313,7 +263,61 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
+        /// <summary>
+        /// Get roles and permissions by user
+        /// </summary>
+        /// <param name="userId">UserId for which roles and permissions needs to be fetched</param>
+        /// <returns>return result if any found</returns>
+        public List<RoleModel> GetRolePermissionByUser(int userId)
+        {
+            try
+            {
+                var dataToReturn = new List<RoleModel>();
+                var assignedRoles = _context.AssignedRoles.Where(a => a.UserId == userId).Include(a => a.Role);
+                var assigned_Roles = assignedRoles.ToList();
 
+                foreach (var assignedRole in assigned_Roles)
+                {
+                    if (assignedRole.Role != null)
+                    {
+                        RoleModel roleModel = new RoleModel();
+                        roleModel.RoleId = assignedRole.RoleId;
+                        roleModel.Name = assignedRole.Role.Name;
+                        roleModel.Description = assignedRole.Role.Description;
+                        roleModel.IsStatic = assignedRole.Role.IsStatic;
+                        roleModel.Permissions = new List<PermissionsModel>();
+
+                        var permissions = _context.Roles.Where(p => p.RoleId == roleModel.RoleId).Include(b => b.Permissions);
+                        var permissionList = permissions.ToList();
+
+                        foreach (var permission in permissionList[0].Permissions)
+                        {
+                            PermissionsModel permModel = new PermissionsModel();
+                            permModel.PermissionId = permission.PermissionId;
+                            permModel.Create = permission.Create;
+                            permModel.Read = permission.Read;
+                            permModel.Update = permission.Update;
+                            permModel.Delete = permission.Delete;
+
+                            var module = _context.Modules.SingleOrDefault(m => m.ModuleId == permission.ModuleId);
+                            if (module != null)
+                            {
+                                permModel.ModuleId = module.ModuleId;
+                                permModel.ModuleName = module.Name;
+                            }
+
+                            roleModel.Permissions.Add(permModel);
+                        }
+                        dataToReturn.Add(roleModel);
+                    }
+                }
+                return dataToReturn;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
 
