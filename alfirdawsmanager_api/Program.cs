@@ -65,6 +65,7 @@ builder.Services.AddScoped<IRoleInterface, RoleService>();
 builder.Services.AddScoped<IModuleInterface, ModuleService>();
 builder.Services.AddScoped<ICategoryInterface, CategoryService>();
 builder.Services.AddScoped<ICountryInterface, CountryService>();
+builder.Services.AddScoped<ICampaignTypeInterface, CampaignTypeService>();
 
 var config = new MapperConfiguration(cfg =>
 {
