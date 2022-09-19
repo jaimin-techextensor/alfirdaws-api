@@ -54,9 +54,10 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddCors(p => p.AddPolicy("CorsPolicy", build =>
 {
-build.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+    build.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
 }));
 
+#region Service and Interface Injection
 builder.Services.AddScoped<AlfirdawsManagerDbContext, AlfirdawsManagerDbContext>();
 builder.Services.AddScoped<IAuthenticateInterface, AuthenticateService>();
 builder.Services.AddScoped<ISettingsInterface, SettingsService>();
@@ -66,6 +67,8 @@ builder.Services.AddScoped<IModuleInterface, ModuleService>();
 builder.Services.AddScoped<ICategoryInterface, CategoryService>();
 builder.Services.AddScoped<ICountryInterface, CountryService>();
 builder.Services.AddScoped<ICampaignTypeInterface, CampaignTypeService>();
+builder.Services.AddScoped<IReachTypeInterface, ReachTypeService>();
+#endregion
 
 var config = new MapperConfiguration(cfg =>
 {
@@ -89,7 +92,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}   
+}
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 

@@ -7,39 +7,39 @@ namespace alfirdawsmanager_api.Controllers
 {
     [Route("api")]
     [ApiController]
-    public class CampaignTypeController : Controller
+    public class ReachTypeController : Controller
     {
 
         #region Members
-        private ICampaignTypeInterface _campaignTypeInterface;
+        private IReachTypeInterface _reachTypeInterface;
         #endregion
 
         #region Constructors
-        public CampaignTypeController(ICampaignTypeInterface campaignTypeInterface)
+        public ReachTypeController(IReachTypeInterface reachTypeInterface)
         {
-            _campaignTypeInterface = campaignTypeInterface ?? throw new ArgumentNullException(nameof(campaignTypeInterface));
+            _reachTypeInterface = reachTypeInterface ?? throw new ArgumentNullException(nameof(reachTypeInterface));
         }
         #endregion
 
         /// <summary>
-        /// Retrieves the overview of all campaign types
+        /// Retrieves the overview of all reach types
         /// </summary>
-        /// <returns>List of campaign types</returns>
+        /// <returns>List of Reach types</returns>
         [HttpGet]
-        [Route("campaigntypes")]
-        public async Task<IActionResult> GetCampaignTypeOverview()
+        [Route("reachtypes")]
+        public async Task<IActionResult> GetReachTypeOverview()
         {
             try
             {
                 IActionResult? response = null;
-                var result = await _campaignTypeInterface.GetCampaignTypesOverview();
+                var result = await _reachTypeInterface.GetReachTypesOverview();
                 if (result != null)
                 {
-                    return response = Ok(new { Success = true, Message = "Retrieved campaign types overview", Data = result });
+                    return response = Ok(new { Success = true, Message = "Retrieved reach types overview", Data = result });
                 }
                 else
                 {
-                    return response = NotFound(new { Success = false, Message = "Could not retrieve campaign types overview" });
+                    return response = NotFound(new { Success = false, Message = "Could not retrieve reach types overview" });
                 }
             }
             catch (Exception)
@@ -50,25 +50,25 @@ namespace alfirdawsmanager_api.Controllers
 
 
         /// <summary>
-        /// Gets information of one campaign type 
+        /// Gets information of one reach type 
         /// </summary>
-        /// <param name="id">Unique id of the campaign type</param>
-        /// <returns>campaign type object</returns>
+        /// <param name="id">Unique id of the reach type</param>
+        /// <returns>reach type object</returns>
         [HttpGet]
-        [Route("campaigntypes/{id}")]
-        public async Task<IActionResult> GetCampaignTypeById(int id)
+        [Route("reachtypes/{id}")]
+        public async Task<IActionResult> GetReachTypeById(int id)
         {
             try
             {
                 IActionResult? response = null;
-                var result = await _campaignTypeInterface.GetCampaignTypeById(id);
+                var result = await _reachTypeInterface.GetReachTypeById(id);
                 if (result != null)
                 {
-                    return response = Ok(new { Success = true, Message = "Get campaign type by Id retrieved", Data = result });
+                    return response = Ok(new { Success = true, Message = "Get reach type by Id retrieved", Data = result });
                 }
                 else
                 {
-                    return response = NotFound(new { Success = false, Message = "Could not retrieve campaign type by Id" });
+                    return response = NotFound(new { Success = false, Message = "Could not retrieve reach type by Id" });
                 }
 
             }
@@ -80,25 +80,25 @@ namespace alfirdawsmanager_api.Controllers
 
 
         /// <summary>
-        /// Create new campaign type 
+        /// Create new reach type 
         /// </summary>
-        /// <param name="campaignTypeRequest">campaign type request object</param>
+        /// <param name="reachTypeRequest">reach type request object</param>
         /// <returns>Ok or Badrequest</returns>
         [HttpPost]
-        [Route("campaigntypes")]
-        public async Task<IActionResult> CreateCampaignType(CampaignTypeCreateRequest campaignTypeRequest)
+        [Route("reachtypes")]
+        public async Task<IActionResult> CreateReachType(ReachTypeCreateRequest reachTypeRequest)
         {
             try
             {
                 IActionResult? response = null;
-                if (campaignTypeRequest.Name == null)
+                if (reachTypeRequest.Name == null)
                 {
                     return response = BadRequest(new { Success = false, Message = "Please fill in the required fields" });
                 }
-                var result = _campaignTypeInterface.CreateCampaignType(campaignTypeRequest);
+                var result = _reachTypeInterface.CreateReachType(reachTypeRequest);
                 if (result.Success == true)
                 {
-                    return response = Ok(new { Success = result.Success, Message = "Campaign Type created successfully !!!" });
+                    return response = Ok(new { Success = result.Success, Message = "Reach Type created successfully !!!" });
                 }
                 else if (!string.IsNullOrEmpty(result.Message))
                 {
@@ -117,25 +117,25 @@ namespace alfirdawsmanager_api.Controllers
 
 
         /// <summary>
-        /// Updates the information of a campaign type 
+        /// Updates the information of a reach type 
         /// </summary>
-        /// <param name="campaignTypeRequest">Campaign type request opbject</param>
+        /// <param name="reachTypeRequest">Reach type request opbject</param>
         /// <returns>Ok or bad request</returns>
         [HttpPut]
-        [Route("campaigntypes")]
-        public async Task<IActionResult> UpdateCampaignType(CampaignTypeUpdateRequest campaignTypeRequest)
+        [Route("reachtypes")]
+        public async Task<IActionResult> UpdateReachType(ReachTypeUpdateRequest reachTypeRequest)
         {
             try
             {
                 IActionResult? response = null;
-                if (campaignTypeRequest.CampaignTypeId == null)
+                if (reachTypeRequest.ReachTypeId == null)
                 {
                     return response = BadRequest(new { Success = false, Message = "Please fill in the required fields" });
                 }
-                var result = _campaignTypeInterface.UpdateCampaignType(campaignTypeRequest);
+                var result = _reachTypeInterface.UpdateReachType(reachTypeRequest);
                 if (result.Success == true)
                 {
-                    return response = Ok(new { Success = result.Success, Message = "Campaign Type updated successfully !!!" });
+                    return response = Ok(new { Success = result.Success, Message = "Reach Type updated successfully !!!" });
                 }
                 else if (!string.IsNullOrEmpty(result.Message))
                 {
@@ -153,21 +153,21 @@ namespace alfirdawsmanager_api.Controllers
         }
 
         /// <summary>
-        /// Deletes a campaign type
+        /// Deletes a reach type
         /// </summary>
-        /// <param name="id">Unique id of the campaign type that needs to be deleted</param>
+        /// <param name="id">Unique id of the reach type that needs to be deleted</param>
         /// <returns>Ok or bad request</returns>
         [HttpDelete]
-        [Route("campaigntypes/{id}")]
-        public async Task<IActionResult> DeleteCampaignType(int id)
+        [Route("reachtypes/{id}")]
+        public async Task<IActionResult> DeleteReachType(int id)
         {
             try
             {
                 IActionResult? response = null;
-                var result = _campaignTypeInterface.DeleteCampaignType(id);
+                var result = _reachTypeInterface.DeleteReachType(id);
                 if (result == true)
                 {
-                    return response = Ok(new { Success = true, Message = "Campaign Type deleted successfully !!!" });
+                    return response = Ok(new { Success = true, Message = "Reach Type deleted successfully !!!" });
                 }
                 else
                 {

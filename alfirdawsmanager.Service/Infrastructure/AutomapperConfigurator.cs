@@ -16,6 +16,7 @@ namespace alfirdawsmanager.Service.Infrastructure
             CreateMap<Category, CategoryModel>().ReverseMap(); //reverse so the both direction
             CreateMap<SubCategory, SubCategoryModel>().ReverseMap(); //reverse so the both direction
             CreateMap<CampaignType, CampaignTypeModel>().ReverseMap(); //reverse so the both direction
+            CreateMap<ReachType, ReachTypeModel>().ReverseMap(); //reverse so the both direction
         }
     }
 }

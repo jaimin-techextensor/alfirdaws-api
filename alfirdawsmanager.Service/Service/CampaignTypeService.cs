@@ -31,14 +31,14 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-                List<CampaignTypeModel> categories = _context.CampaignTypes
+                List<CampaignTypeModel> campaignTypes= _context.CampaignTypes
                                                 .Select(c => new CampaignTypeModel
                                                 {
                                                     Name = c.Name,
                                                     CampaignTypeId = c.CampaignTypeId
                                                 }).ToList();
 
-                return Task.FromResult(categories);
+                return Task.FromResult(campaignTypes);
             }
             catch (Exception)
             {
@@ -49,7 +49,7 @@ namespace alfirdawsmanager.Service.Service
         /// <summary>
         /// Create a new campaign type 
         /// </summary>
-        /// <param name="catRequest">The campaign type request</param>
+        /// <param name="campaignTypeRequest">The campaign type request</param>
         /// <returns>Response with message and success status</returns>
         public Response CreateCampaignType(CampaignTypeCreateRequest campaignTypeRequest)
         {
@@ -82,14 +82,14 @@ namespace alfirdawsmanager.Service.Service
         /// <summary>
         /// Updates a campaign type
         /// </summary>
-        /// <param name="catRequest">The campaign type update request</param>
+        /// <param name="campaignTypeRequest">The campaign type update request</param>
         /// <returns>Boolean indication if the update was successfull or not</returns>
         public Response UpdateCampaignType(CampaignTypeUpdateRequest campaignTypeRequest)
         {
             try
             {
                 Response response = new Response();
-                var existCampaignType = _context.CampaignTypes.FirstOrDefault(a => a.Name.Equals(campaignTypeRequest.Name));
+                var existCampaignType = _context.CampaignTypes.FirstOrDefault(a => a.Name.Equals(campaignTypeRequest.Name) && a.CampaignTypeId != campaignTypeRequest.CampaignTypeId);
                 if (existCampaignType == null)
                 {
                     var objCampaignType = _context.CampaignTypes.FirstOrDefault(a => a.CampaignTypeId == campaignTypeRequest.CampaignTypeId);
@@ -143,7 +143,7 @@ namespace alfirdawsmanager.Service.Service
         /// <summary>
         /// Retrieves a specific campaign type 
         /// </summary>
-        /// <param name="categoryId">The unique id of the campaign type</param>
+        /// <param name="campaignTypeId">The unique id of the campaign type</param>
         /// <returns>The campaign type object</returns>
         public Task<CampaignTypeModel> GetCampaignTypeById(int campaignTypeId)
         {
