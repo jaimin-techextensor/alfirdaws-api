@@ -31,14 +31,15 @@ namespace alfirdawsmanager.Service.Service
                 List<CountryModel> countries = _context.Countries
                                                 .Include(s => s.Regions)
                                                 .Select(c => new CountryModel
-                                                    {
-                                                        CountryId = c.CountryId,
-                                                        Flag = c.Flag,
-                                                        Active = c.Active,
-                                                        Icon = c.Icon,
-                                                        Name = c.Name,
-                                                        CountRegions = c.Regions.Count()
-                                                    }
+                                                {
+                                                    CountryId = c.CountryId,
+                                                    Flag = c.Flag,
+                                                    Active = c.Active,
+                                                    Icon = c.Icon,
+                                                    Name = c.Name,
+                                                    CountRegions = c.Regions.Count(),
+                                                    Regions = _mapper.Map<List<RegionModel>>(c.Regions.ToList())
+                                                }
                                                 ).ToList();
                 return Task.FromResult(countries);
 

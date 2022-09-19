@@ -49,7 +49,9 @@ namespace alfirdawsmanager.Service.Service
                                                         Active = c.Active,
                                                         Icon = c.Icon,
                                                         Name = c.Name,
-                                                        CountSubcategories = c.SubCategories.Count()
+                                                        CountSubcategories = c.SubCategories.Count(),
+                                                        Subcategories = _mapper.Map<List<SubCategoryModel>>(c.SubCategories.ToList())
+                                                       
                                                     }
                                                     ).ToList();
 

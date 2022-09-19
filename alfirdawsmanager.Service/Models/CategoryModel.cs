@@ -9,6 +9,7 @@ namespace alfirdawsmanager.Service.Models
         public string? Icon { get; set; }
         public bool? Active { get; set; }
         public int CountSubcategories { get; set; }
+        public List<SubCategoryModel>? Subcategories { get; set; }
     }
 }
 
