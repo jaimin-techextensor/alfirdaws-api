@@ -93,7 +93,7 @@ namespace alfirdawsmanager_api.Controllers
                 IActionResult? response = null;
                 if (campaignTypeRequest.Name == null)
                 {
-                    return response = BadRequest(new { Success = false, Message = "Please fill in the required fields" });
+                    return response = Ok(new { Success = false, Message = "Please fill in the required fields" });
                 }
                 var result = _campaignTypeInterface.CreateCampaignType(campaignTypeRequest);
                 if (result.Success == true)
@@ -130,7 +130,7 @@ namespace alfirdawsmanager_api.Controllers
                 IActionResult? response = null;
                 if (campaignTypeRequest.CampaignTypeId == null)
                 {
-                    return response = BadRequest(new { Success = false, Message = "Please fill in the required fields" });
+                    return response = Ok(new { Success = false, Message = "Please fill in the required fields" });
                 }
                 var result = _campaignTypeInterface.UpdateCampaignType(campaignTypeRequest);
                 if (result.Success == true)

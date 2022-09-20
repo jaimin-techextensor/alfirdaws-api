@@ -68,6 +68,7 @@ builder.Services.AddScoped<ICategoryInterface, CategoryService>();
 builder.Services.AddScoped<ICountryInterface, CountryService>();
 builder.Services.AddScoped<ICampaignTypeInterface, CampaignTypeService>();
 builder.Services.AddScoped<IReachTypeInterface, ReachTypeService>();
+builder.Services.AddScoped<IPeriodTypeInterface, PeriodTypeService>();
 #endregion
 
 var config = new MapperConfiguration(cfg =>

@@ -12,8 +12,8 @@ namespace alfirdawsmanager.Data.Models
         }
 
         public int PeriodTypeId { get; set; }
-        public string? Name { get; set; }
-        public int? NrOfDays { get; set; }
+        public string Name { get; set; }
+        public int NrOfDays { get; set; }
 
         public virtual ICollection<Campaign> Campaigns { get; set; }
         public virtual ICollection<PricingModel> PricingModels { get; set; }
