@@ -21,6 +21,7 @@ namespace alfirdawsmanager.Service.Models
         public string  CampaignTypeName { get; set; }
         public string PeriodTypeName { get; set; }
         public string ReachTypeName { get; set; }
+        public int NrOfDays { get; set; }
         public List<CampaignTypeModel> CampaignTypes { get; set; }
         public List<ReachTypeModel> ReachTypes { get; set; }
         public List<PeriodTypeModel> PeriodTypes { get; set; }

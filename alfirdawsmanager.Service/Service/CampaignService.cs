@@ -57,7 +57,8 @@ namespace alfirdawsmanager.Service.Service
                                                       Price = c.Price,
                                                       PricePerDay = c.PricePerDay,
                                                       Saving = c.Saving,
-                                                      Visual = c.Visual
+                                                      Visual = c.Visual,
+                                                      NrOfDays = c.PeriodType.NrOfDays
                                                   }).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
 
                     return dataToReturn;
@@ -82,7 +83,8 @@ namespace alfirdawsmanager.Service.Service
                         Price = c.Price,
                         PricePerDay = c.PricePerDay,
                         Saving = c.Saving,
-                        Visual = c.Visual
+                        Visual = c.Visual,
+                        NrOfDays = c.PeriodType.NrOfDays
                     }).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
                     return dataToReturn;
                 }
