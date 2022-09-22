@@ -1,9 +1,11 @@
 ﻿using alfirdawsmanager.Service.Interface;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace alfirdawsmanager_api.Controllers
 {
+    [EnableCors("CorsPolicy")]
     [Route("api/settings")]
     [ApiController]
     public class SettingsController : ControllerBase

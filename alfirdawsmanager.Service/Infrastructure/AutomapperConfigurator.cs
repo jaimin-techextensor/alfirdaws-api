@@ -19,6 +19,7 @@ namespace alfirdawsmanager.Service.Infrastructure
             CreateMap<Region, RegionModel>().ReverseMap(); //reverse so the both direction
             CreateMap<ReachType, ReachTypeModel>().ReverseMap(); //reverse so the both direction
             CreateMap<PeriodType, PeriodTypeModel>().ReverseMap(); //reverse so the both direction
+            CreateMap<Campaign, CampaignModel>().ReverseMap(); //reverse so the both direction
         }
     }
 }

@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Models.RequestModels;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace alfirdawsmanager_api.Controllers
 {
+    [EnableCors("CorsPolicy")]
     [Route("api")]
     [ApiController]
     public class CategoryController : Controller

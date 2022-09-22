@@ -42,6 +42,9 @@ namespace alfirdawsmanager.Service.Service
                 settingsCounterModel.paymentTypesCount = _context.PaymentTypes.Count();
                 settingsCounterModel.invoiceTypesCount = _context.InvoiceTypes.Count();
                 settingsCounterModel.vATTypesCount = _context.Vattypes.Count();
+                settingsCounterModel.campaignTypesCount = _context.CampaignTypes.Count();
+                settingsCounterModel.reachTypesCount = _context.ReachTypes.Count();
+                settingsCounterModel.periodTypesCount = _context.PeriodTypes.Count();
 
                 return settingsCounterModel;
             }

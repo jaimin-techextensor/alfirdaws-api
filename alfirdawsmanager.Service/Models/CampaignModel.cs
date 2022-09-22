@@ -1,6 +1,8 @@
-﻿namespace alfirdawsmanager.Data.Models
+﻿using alfirdawsmanager.Data.Models;
+
+namespace alfirdawsmanager.Service.Models
 {
-    public partial class Campaign
+    public class CampaignModel
     {
         public int CampaignId { get; set; }
         public int CampaignTypeId { get; set; }
@@ -16,9 +18,12 @@
         public string? ImpactPosition { get; set; }
         public string? ImpactViews { get; set; }
         public bool? Active { get; set; }
-
-        public virtual CampaignType? CampaignType { get; set; }
-        public virtual PeriodType? PeriodType { get; set; }
-        public virtual ReachType? ReachType { get; set; }
+        public string  CampaignTypeName { get; set; }
+        public string PeriodTypeName { get; set; }
+        public string ReachTypeName { get; set; }
+        public List<CampaignTypeModel> CampaignTypes { get; set; }
+        public List<ReachTypeModel> ReachTypes { get; set; }
+        public List<PeriodTypeModel> PeriodTypes { get; set; }
     }
 }
+

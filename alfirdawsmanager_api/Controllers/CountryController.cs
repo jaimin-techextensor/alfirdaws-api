@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Models.RequestModels;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace alfirdawsmanager_api.Controllers
 {
+    [EnableCors("CorsPolicy")]
     [Route("api")]
     [ApiController]
     public class CountryController : Controller
