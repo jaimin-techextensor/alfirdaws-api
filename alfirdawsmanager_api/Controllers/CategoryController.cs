@@ -347,6 +347,41 @@ namespace alfirdawsmanager_api.Controllers
                 throw;
             }
         }
+
+
+        /// <summary>
+        /// Activate/De-activate a subcategory
+        /// </summary>
+        /// <param name="id">The unique id of the subcategory</param>
+        /// <param name="isActive">Activation value</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("categories/subcategories/{id}")]
+        public async Task<IActionResult> ActivateSubCategory(int id, [FromQuery] bool isActive)
+        {
+            try
+            {
+                IActionResult? response = null;
+                if (id == 0)
+                {
+                    return response = BadRequest(new { Success = false, Message = "Please fill in the required fields" });
+                }
+                var result = _categoryInterface.ActivationSubCategory(id, isActive);
+                if (result == true)
+                {
+                    return response = Ok(new { Success = true, Message = "Category updated successfully !!!" });
+                }
+                else
+                {
+                    return response = BadRequest(new { Success = false, Message = "Something went wrong" });
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
 

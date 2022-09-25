@@ -357,6 +357,40 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
+
+
+        /// <summary>
+        /// Activate or De-activate SubCategory
+        /// </summary>
+        /// <param name="subCategoryId">The unique id of the subcategory</param>
+        /// <param name="isActive">Indication of the activation</param>
+        /// <returns>>Returns success or failuer boolean</returns>
+        public bool ActivationSubCategory(int subCategoryId, bool isActive)
+        {
+            try
+            {
+                bool success = true;
+                var subcategory = _context.SubCategories.FirstOrDefault(a => a.SubCategoryId == subCategoryId);
+                
+                if (subcategory != null)
+                {
+                    subcategory.Active = isActive;
+
+                    _context.Update(subcategory);
+                    _context.SaveChanges();
+                    
+                    success = true;
+                    return success; 
+                }
+                return success = false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
+
+
 }
 

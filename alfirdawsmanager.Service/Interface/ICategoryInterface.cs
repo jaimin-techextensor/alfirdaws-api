@@ -17,6 +17,7 @@ namespace alfirdawsmanager.Service.Interface
         bool CreateSubCategory(int categoryId, SubCategoryCreateRequest subCatRequest);
         bool UpdateSubCategory(int categoryId, SubCategoryUpdateRequest subCatRequest);
         bool DeleteSubCategory(int subcategoryId);
+        bool ActivationSubCategory(int subCategoryId, bool isActive);
     }
 }
 
