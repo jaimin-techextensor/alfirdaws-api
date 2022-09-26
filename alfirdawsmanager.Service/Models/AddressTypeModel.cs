@@ -1,8 +1,10 @@
-﻿namespace alfirdawsmanager.Data.Models
+﻿namespace alfirdawsmanager.Service.Models
 {
-    public partial class AddressType
+    public class AddressTypeModel
     {
         public int AddressTypeId { get; set; }
         public string Name { get; set; }
+
     }
 }
+

@@ -21,6 +21,7 @@ namespace alfirdawsmanager.Service.Infrastructure
             CreateMap<PeriodType, PeriodTypeModel>().ReverseMap(); //reverse so the both direction
             CreateMap<Campaign, CampaignModel>().ReverseMap(); //reverse so the both direction
             CreateMap<Data.Models.SubscriptionModel, Models.SubscriptionModel>().ReverseMap(); //reverse so the both direction
+            CreateMap<AddressType, AddressTypeModel>().ReverseMap(); //reverse so the both direction
         }
     }
 }
