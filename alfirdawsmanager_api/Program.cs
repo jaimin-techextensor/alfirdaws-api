@@ -72,6 +72,9 @@ builder.Services.AddScoped<IPeriodTypeInterface, PeriodTypeService>();
 builder.Services.AddScoped<ICampaignInterface, CampaignService>();
 builder.Services.AddScoped<ISubscriptionModelInterface, SubscriptionModelService>();
 builder.Services.AddScoped<IAddressTypeInterface, AddressTypeService>();
+builder.Services.AddScoped<IPaymentTypeInterface, PaymentTypeService>();
+builder.Services.AddScoped<IInvoiceTypeInterface, InvoiceTypeService>();
+builder.Services.AddScoped<IVatTypeInterface, VatTypeService>();
 #endregion
 
 var config = new MapperConfiguration(cfg =>

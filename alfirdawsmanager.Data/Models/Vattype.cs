@@ -7,7 +7,7 @@ namespace alfirdawsmanager.Data.Models
     {
         public int VattypeId { get; set; }
         public string? Name { get; set; }
-        public decimal? Percentage { get; set; }
+        public decimal Percentage { get; set; }
         public string? Description { get; set; }
     }
 }

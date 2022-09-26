@@ -22,6 +22,9 @@ namespace alfirdawsmanager.Service.Infrastructure
             CreateMap<Campaign, CampaignModel>().ReverseMap(); //reverse so the both direction
             CreateMap<Data.Models.SubscriptionModel, Models.SubscriptionModel>().ReverseMap(); //reverse so the both direction
             CreateMap<AddressType, AddressTypeModel>().ReverseMap(); //reverse so the both direction
+            CreateMap<PaymentType, PaymentTypeModel>().ReverseMap(); //reverse so the both direction
+            CreateMap<InvoiceType, InvoiceTypeModel>().ReverseMap(); //reverse so the both direction
+            CreateMap<Vattype, VatTypeModel>().ReverseMap(); //reverse so the both direction
         }
     }
 }
