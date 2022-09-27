@@ -65,6 +65,7 @@ namespace alfirdawsmanager.Service.Service
                 {
                     _context.Add(objPeriodType);
                     _context.SaveChanges();
+                    response.Data = objPeriodType;
                     response.Success = true;
                 }
                 else
@@ -99,6 +100,7 @@ namespace alfirdawsmanager.Service.Service
                         if (objPeriodType.NrOfDays != null) objPeriodType.NrOfDays = periodTypeRequest.NrOfDays;
                         _context.Update(objPeriodType);
                         _context.SaveChanges();
+                        response.Data = objPeriodType;
                         response.Success = true;
                     }
                 }
@@ -107,7 +109,7 @@ namespace alfirdawsmanager.Service.Service
                     response.Success = false;
                     response.Message = "Period Type with same name already exist.";
                 }
-                
+
                 return response;
             }
             catch (Exception)

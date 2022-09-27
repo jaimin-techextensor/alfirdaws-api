@@ -63,6 +63,7 @@ namespace alfirdawsmanager.Service.Service
                 {
                     _context.Add(objReachType);
                     _context.SaveChanges();
+                    response.Data = objReachType;
                     response.Success = true;
                 }
                 else
@@ -96,6 +97,7 @@ namespace alfirdawsmanager.Service.Service
                         if (objReachType.Name != null) objReachType.Name = reachTypeRequest.Name;
                         _context.Update(objReachType);
                         _context.SaveChanges();
+                        response.Data = objReachType;
                         response.Success = true;
                     }
                 }
@@ -104,7 +106,7 @@ namespace alfirdawsmanager.Service.Service
                     response.Success = false;
                     response.Message = "Reach Type with same name already exist.";
                 }
-                
+
                 return response;
             }
             catch (Exception)

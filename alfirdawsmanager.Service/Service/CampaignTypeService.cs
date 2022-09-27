@@ -31,7 +31,7 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-                List<CampaignTypeModel> campaignTypes= _context.CampaignTypes
+                List<CampaignTypeModel> campaignTypes = _context.CampaignTypes
                                                 .Select(c => new CampaignTypeModel
                                                 {
                                                     Name = c.Name,
@@ -65,6 +65,7 @@ namespace alfirdawsmanager.Service.Service
                 {
                     _context.Add(objCampaignType);
                     _context.SaveChanges();
+                    response.Data = objCampaignType;
                     response.Success = true;
                 }
                 else
@@ -98,6 +99,7 @@ namespace alfirdawsmanager.Service.Service
                         if (objCampaignType.Name != null) objCampaignType.Name = campaignTypeRequest.Name;
                         _context.Update(objCampaignType);
                         _context.SaveChanges();
+                        response.Data = objCampaignType;
                         response.Success = true;
                     }
                 }
@@ -106,7 +108,7 @@ namespace alfirdawsmanager.Service.Service
                     response.Success = false;
                     response.Message = "Campaign Type with same name already exist.";
                 }
-                
+
                 return response;
             }
             catch (Exception)
