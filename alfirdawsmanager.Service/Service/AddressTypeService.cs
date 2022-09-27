@@ -62,6 +62,7 @@ namespace alfirdawsmanager.Service.Service
                     objAddressType.Name = addressTypeRequest.Name;
                     _context.Add(objAddressType);
                     _context.SaveChanges();
+                    response.Data = objAddressType;
                     response.Success = true;
                 }
                 else
@@ -95,6 +96,7 @@ namespace alfirdawsmanager.Service.Service
                         if (objAddressType.Name != null) objAddressType.Name = addressTypeRequest.Name;
                         _context.Update(objAddressType);
                         _context.SaveChanges();
+                        response.Data = objAddressType;
                         response.Success = true;
                     }
                 }

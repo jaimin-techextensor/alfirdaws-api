@@ -100,7 +100,7 @@ namespace alfirdawsmanager_api.Controllers
                 var result = _addressTypeInterface.CreateAddressType(addressTypeRequest);
                 if (result.Success == true)
                 {
-                    return response = Ok(new { Success = result.Success, Message = "Address Type created successfully !!!" });
+                    return response = Ok(new { Success = result.Success, Message = "Address Type created successfully !!!", Data = result.Data });
                 }
                 else if (!string.IsNullOrEmpty(result.Message))
                 {
@@ -137,7 +137,7 @@ namespace alfirdawsmanager_api.Controllers
                 var result = _addressTypeInterface.UpdateAddressType(addressTypeRequest);
                 if (result.Success == true)
                 {
-                    return response = Ok(new { Success = result.Success, Message = "Address Type updated successfully !!!" });
+                    return response = Ok(new { Success = result.Success, Message = "Address Type updated successfully !!!", Data = result.Data });
                 }
                 else if (!string.IsNullOrEmpty(result.Message))
                 {
