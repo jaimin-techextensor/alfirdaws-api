@@ -68,6 +68,7 @@ namespace alfirdawsmanager.Service.Service
 
                     _context.Add(objVATType);
                     _context.SaveChanges();
+                    response.Data = objVATType;
                     response.Success = true;
                 }
                 else
@@ -134,7 +135,7 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
-       
+
         /// <summary>
         /// Updates a specific VAT Type
         /// </summary>
@@ -157,6 +158,7 @@ namespace alfirdawsmanager.Service.Service
 
                         _context.Update(objVATType);
                         _context.SaveChanges();
+                        response.Data = objVATType;
                         response.Success = true;
                     }
                 }

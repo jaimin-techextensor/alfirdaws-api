@@ -7,7 +7,7 @@ using AutoMapper;
 
 namespace alfirdawsmanager.Service.Service
 {
-    public class PaymentTypeService: IPaymentTypeInterface
+    public class PaymentTypeService : IPaymentTypeInterface
     {
         #region Members
 
@@ -67,6 +67,7 @@ namespace alfirdawsmanager.Service.Service
                     objPaymentType.Icon = paymentTypeRequest.Icon;
                     _context.Add(objPaymentType);
                     _context.SaveChanges();
+                    response.Data = objPaymentType;
                     response.Success = true;
                 }
                 else
@@ -132,7 +133,7 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
-       
+
         /// <summary>
         /// Updates a specific payment type
         /// </summary>
@@ -153,6 +154,7 @@ namespace alfirdawsmanager.Service.Service
                         if (objPaymentType.Icon != null) objPaymentType.Icon = paymentTypeRequest.Icon;
                         _context.Update(objPaymentType);
                         _context.SaveChanges();
+                        response.Data = objPaymentType;
                         response.Success = true;
                     }
                 }

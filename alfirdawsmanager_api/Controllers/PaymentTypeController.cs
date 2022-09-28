@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using alfirdawsmanager.Service.Interface;
+﻿using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Models.RequestModels;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -104,7 +100,7 @@ namespace alfirdawsmanager_api.Controllers
                 var result =  _paymentTypeInterface.CreatePaymentType(paymentTypeRequest);
                 if (result.Success == true)
                 {
-                    return response = Ok(new { Success = result.Success, Message = "Payment type created successfully !!!" });
+                    return response = Ok(new { Success = result.Success, Message = "Payment type created successfully !!!", Data = result.Data });
                 }
                 else if (!string.IsNullOrEmpty(result.Message))
                 {
@@ -140,7 +136,7 @@ namespace alfirdawsmanager_api.Controllers
                 var result = _paymentTypeInterface.UpdatePaymentType(paymentTypeRequest);
                 if (result.Success == true)
                 {
-                    return response = Ok(new { Success = result.Success, Message = "Payment type updated successfully !!!" });
+                    return response = Ok(new { Success = result.Success, Message = "Payment type updated successfully !!!", Data = result.Data });
                 }
                 else if (!string.IsNullOrEmpty(result.Message))
                 {

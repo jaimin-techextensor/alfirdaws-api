@@ -7,7 +7,7 @@ using AutoMapper;
 
 namespace alfirdawsmanager.Service.Service
 {
-    public class InvoiceTypeService : IInvoiceTypeInterface 
+    public class InvoiceTypeService : IInvoiceTypeInterface
     {
         #region Members
 
@@ -27,7 +27,7 @@ namespace alfirdawsmanager.Service.Service
         /// </summary>
         /// <returns>List of invoice types</returns>
         public Task<List<InvoiceTypeModel>> GetInvoiceTypeOverview()
-        {   
+        {
             try
             {
                 List<InvoiceTypeModel> invoiceTypes = _context.InvoiceTypes
@@ -43,10 +43,10 @@ namespace alfirdawsmanager.Service.Service
             {
                 throw;
             }
-            
+
         }
 
-      
+
         /// <summary>
         /// Creates a new invoice type
         /// </summary>
@@ -65,6 +65,7 @@ namespace alfirdawsmanager.Service.Service
                     objInvoicetype.Name = invoiceTypeRequest.Name;
                     _context.Add(objInvoicetype);
                     _context.SaveChanges();
+                    response.Data = objInvoicetype;
                     response.Success = true;
                 }
                 else
@@ -110,7 +111,7 @@ namespace alfirdawsmanager.Service.Service
         /// </summary>
         /// <param name="invoiceTypeId">Unique id of the invoice type</param>
         /// <returns>Invoice Type object</returns>
-     
+
         public Task<InvoiceTypeModel> GetInvoiceTypeById(int invoiceTypeId)
         {
             try
@@ -130,7 +131,7 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
-       
+
         /// <summary>
         /// Updates an invoice Type
         /// </summary>
@@ -150,6 +151,7 @@ namespace alfirdawsmanager.Service.Service
                         if (objInvoiceType.Name != null) objInvoiceType.Name = invoiceTypeRequest.Name;
                         _context.Update(objInvoiceType);
                         _context.SaveChanges();
+                        response.Data = objInvoiceType;
                         response.Success = true;
                     }
                 }

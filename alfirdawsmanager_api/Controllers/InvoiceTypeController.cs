@@ -104,7 +104,7 @@ namespace alfirdawsmanager_api.Controllers
                 var result = _invoiceTypeInterface.CreateInvoiceType(invoiceTypeRequest);
                 if (result.Success == true)
                 {
-                    return response = Ok(new { Success = result.Success, Message = "Invoice type created successfully !!!" });
+                    return response = Ok(new { Success = result.Success, Message = "Invoice type created successfully !!!", Data = result.Data });
                 }
                 else if (!string.IsNullOrEmpty(result.Message))
                 {
@@ -140,7 +140,7 @@ namespace alfirdawsmanager_api.Controllers
                 var result = _invoiceTypeInterface.UpdateInvoiceType(invoiceTypeRequest);
                 if (result.Success == true)
                 {
-                    return response = Ok(new { Success = result.Success, Message = "Invoice type updated successfully !!!" });
+                    return response = Ok(new { Success = result.Success, Message = "Invoice type updated successfully !!!", Data = result.Data });
                 }
                 else if (!string.IsNullOrEmpty(result.Message))
                 {
