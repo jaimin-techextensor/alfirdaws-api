@@ -144,7 +144,7 @@ namespace alfirdawsmanager.Service.Service
                     if (objSubscriptionModel.UnlimitedPictures != null) objSubscriptionModel.UnlimitedPictures = subscriptionModelRequest.UnlimitedPictures;
                     if (objSubscriptionModel.UnlimitedAds != null) objSubscriptionModel.UnlimitedAds = subscriptionModelRequest.UnlimitedAds;
                     if (objSubscriptionModel.Description != null) objSubscriptionModel.Description = subscriptionModelRequest.Description;
-                    if (objSubscriptionModel.Visual != null) objSubscriptionModel.Description = subscriptionModelRequest.Visual;
+                    if (objSubscriptionModel.Visual != null) objSubscriptionModel.Visual = subscriptionModelRequest.Visual;
 
                     _context.Update(objSubscriptionModel);
                     _context.SaveChanges();

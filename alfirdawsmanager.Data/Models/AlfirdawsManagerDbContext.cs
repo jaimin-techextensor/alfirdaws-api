@@ -514,7 +514,7 @@ namespace alfirdawsmanager.Data.Models
             {
                 entity.ToTable("VATType", "alfirdaws_usr");
 
-                entity.Property(e => e.VattypeId).HasColumnName("VATTypeId");
+                entity.Property(e => e.VatTypeId).HasColumnName("VATTypeId");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(200)

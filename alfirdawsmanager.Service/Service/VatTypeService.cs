@@ -34,7 +34,7 @@ namespace alfirdawsmanager.Service.Service
                                                 .Select(c => new VatTypeModel
                                                 {
                                                     Name = c.Name,
-                                                    VatTypeId = c.VattypeId,
+                                                    VatTypeId = c.VatTypeId,
                                                     Percentage = c.Percentage,
                                                     Description = c.Description
                                                 }).ToList();
@@ -95,7 +95,7 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 bool success = false;
-                var objVATType = _context.Vattypes.FirstOrDefault(a => a.VattypeId == vatTypeId);
+                var objVATType = _context.Vattypes.FirstOrDefault(a => a.VatTypeId == vatTypeId);
                 if (objVATType != null)
                 {
                     _context.Remove(objVATType);
@@ -121,7 +121,7 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 VatTypeModel vatTypeModel = new VatTypeModel();
-                var vatType = _context.Vattypes.FirstOrDefault(s => s.VattypeId == vatTypeId);
+                var vatType = _context.Vattypes.FirstOrDefault(s => s.VatTypeId == vatTypeId);
                 if (vatType != null)
                 {
                     vatTypeModel = _mapper.Map<VatTypeModel>(vatType);
@@ -146,10 +146,10 @@ namespace alfirdawsmanager.Service.Service
             try
             {
                 Response response = new Response();
-                var existVATType = _context.Vattypes.FirstOrDefault(a => a.Name.Equals(vatTypeRequest.Name) && a.VattypeId != vatTypeRequest.VatTypeId);
+                var existVATType = _context.Vattypes.FirstOrDefault(a => a.Name.Equals(vatTypeRequest.Name) && a.VatTypeId != vatTypeRequest.VatTypeId);
                 if (existVATType == null)
                 {
-                    var objVATType = _context.Vattypes.FirstOrDefault(a => a.VattypeId == vatTypeRequest.VatTypeId);
+                    var objVATType = _context.Vattypes.FirstOrDefault(a => a.VatTypeId == vatTypeRequest.VatTypeId);
                     if (objVATType != null)
                     {
                         if (objVATType.Name != null) objVATType.Name = vatTypeRequest.Name;
