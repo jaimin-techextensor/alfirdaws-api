@@ -25,6 +25,7 @@ namespace alfirdawsmanager.Service.Infrastructure
             CreateMap<PaymentType, PaymentTypeModel>().ReverseMap(); //reverse so the both direction
             CreateMap<InvoiceType, InvoiceTypeModel>().ReverseMap(); //reverse so the both direction
             CreateMap<Vattype, VatTypeModel>().ReverseMap(); //reverse so the both direction
+            CreateMap<Data.Models.PricingModel, Models.PricingModel>().ReverseMap(); //reverse so the both direction
         }
     }
 }

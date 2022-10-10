@@ -1,11 +1,6 @@
 ﻿using alfirdawsmanager.Data.Models;
 using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace alfirdawsmanager.Service.Service
 {
@@ -45,6 +40,7 @@ namespace alfirdawsmanager.Service.Service
                 settingsCounterModel.campaignTypesCount = _context.CampaignTypes.Count();
                 settingsCounterModel.reachTypesCount = _context.ReachTypes.Count();
                 settingsCounterModel.periodTypesCount = _context.PeriodTypes.Count();
+                settingsCounterModel.pricingModelsCount = _context.PricingModels.Count();
 
                 return settingsCounterModel;
             }

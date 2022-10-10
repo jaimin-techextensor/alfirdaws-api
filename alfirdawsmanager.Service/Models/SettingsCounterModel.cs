@@ -25,5 +25,6 @@ namespace alfirdawsmanager.Service.Models
         public int campaignTypesCount { get;set; }
         public int reachTypesCount { get;set; }
         public int periodTypesCount { get;set; }
+        public int pricingModelsCount { get;set; }
     }
 }
