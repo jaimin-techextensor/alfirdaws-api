@@ -31,42 +31,41 @@ namespace alfirdawsmanager.Service.Service
             {
                 if (!string.IsNullOrEmpty(pageParamsRequestModel.SearchText) && pageParamsRequestModel.SearchText != "null")
                 {
-                    var dataToReturn = PagedList<Models.PricingModel>.ToPagedList(_context.PricingModels
-                                                  .Where(a => (((a.SubscriptionModel.Name != null && a.SubscriptionModel.Name != null) && (a.SubscriptionModel.Name.Contains(pageParamsRequestModel.SearchText)))
-                                                                          || ((a.PeriodType.Name != null && a.PeriodType.Name != null) && (a.PeriodType.Name.Contains(pageParamsRequestModel.SearchText)))))
-                                                  .Select(c => new Models.PricingModel
-                                                  {
-                                                      SubscriptionModelId = c.SubscriptionModelId,
-                                                      PeriodTypeId = c.PeriodTypeId,
-                                                      NetPrice = c.NetPrice,
-                                                      DiscountPercentage = c.DiscountPercentage,
-                                                      NrOfDays = c.NrOfDays,
-                                                      Price = c.Price,
-                                                      PricePerDay = c.PricePerDay,
-                                                      PricingModelId = c.PricingModelId,
-                                                      Saving = c.Saving,
-                                                      PeriodType = c.PeriodType.Name,
-                                                      SubscriptionModel = c.SubscriptionModel.Name
-                                                  }).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+                    var list = (from pricingModel in _context.PricingModels
+                                where (pricingModel.SubscriptionModel != null && pricingModel.SubscriptionModel.Name != null) && (pricingModel.SubscriptionModel.Name.Contains(pageParamsRequestModel.SearchText)
+                                                                          || pricingModel.PeriodType != null && pricingModel.PeriodType.Name != null && pricingModel.PeriodType.Name.Contains(pageParamsRequestModel.SearchText))
+                                select new Models.PricingModel
+                                {
+                                    SubscriptionModelId = pricingModel.SubscriptionModelId,
+                                    PeriodTypeId = pricingModel.PeriodTypeId,
+                                    NetPrice = pricingModel.NetPrice,
+                                    DiscountPercentage = pricingModel.DiscountPercentage,
+                                    NrOfDays = pricingModel.NrOfDays,
+                                    Price = pricingModel.Price,
+                                    PricingModelId = pricingModel.PricingModelId,
+                                    PeriodType = pricingModel.PeriodType.Name,
+                                    SubscriptionModel = pricingModel.SubscriptionModel.Name
+                                }).ToList();
+                    var dataToReturn = PagedList<Models.PricingModel>.ToPagedList(list, pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
 
                     return dataToReturn;
                 }
                 else
                 {
-                    var dataToReturn = PagedList<Models.PricingModel>.ToPagedList(_context.PricingModels.OrderByDescending(a => a.PricingModelId).Select(c => new Models.PricingModel
-                    {
-                        SubscriptionModelId = c.SubscriptionModelId,
-                        PeriodTypeId = c.PeriodTypeId,
-                        NetPrice = c.NetPrice,
-                        DiscountPercentage = c.DiscountPercentage,
-                        NrOfDays = c.NrOfDays,
-                        Price = c.Price,
-                        PricePerDay = c.PricePerDay,
-                        PricingModelId = c.PricingModelId,
-                        Saving = c.Saving,
-                        PeriodType = c.PeriodType.Name,
-                        SubscriptionModel = c.SubscriptionModel.Name
-                    }).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+                    var list = (from pricingModel in _context.PricingModels
+                                select new Models.PricingModel
+                                {
+                                    SubscriptionModelId = pricingModel.SubscriptionModelId,
+                                    PeriodTypeId = pricingModel.PeriodTypeId,
+                                    NetPrice = pricingModel.NetPrice,
+                                    DiscountPercentage = pricingModel.DiscountPercentage,
+                                    NrOfDays = pricingModel.NrOfDays,
+                                    Price = pricingModel.Price,
+                                    PricingModelId = pricingModel.PricingModelId,
+                                    PeriodType = pricingModel.PeriodType.Name,
+                                    SubscriptionModel = pricingModel.SubscriptionModel.Name
+                                }).ToList();
+                    var dataToReturn = PagedList<Models.PricingModel>.ToPagedList(list, pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
                     return dataToReturn;
                 }
 

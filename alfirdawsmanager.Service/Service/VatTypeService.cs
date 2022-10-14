@@ -30,16 +30,16 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-                List<VatTypeModel> vattypes = _context.Vattypes
-                                                .Select(c => new VatTypeModel
-                                                {
-                                                    Name = c.Name,
-                                                    VatTypeId = c.VatTypeId,
-                                                    Percentage = c.Percentage,
-                                                    Description = c.Description
-                                                }).ToList();
+                var vatTypes = (from vatType in _context.Vattypes
+                            select new VatTypeModel
+                            {
+                                Name = vatType.Name,
+                                VatTypeId = vatType.VatTypeId,
+                                Percentage = vatType.Percentage,
+                                Description = vatType.Description
+                            }).ToList();
 
-                return Task.FromResult(vattypes);
+                return Task.FromResult(vatTypes);
             }
             catch (Exception)
             {
@@ -84,7 +84,6 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
-
         /// <summary>
         /// Repmoves a specific VAT type object
         /// </summary>
@@ -110,7 +109,6 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
-
         /// <summary>
         /// Retrieves a specific VAT Type
         /// </summary>
@@ -134,7 +132,6 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
-
 
         /// <summary>
         /// Updates a specific VAT Type

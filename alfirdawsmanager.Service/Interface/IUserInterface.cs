@@ -6,7 +6,7 @@ namespace alfirdawsmanager.Service.Interface
 {
     public interface IUserInterface
     {
-        PagedList<User> GetUsersOverview(PageParamsRequestModel pageParamsRequestModel);
+        PagedList<UserModel> GetUsersOverview(PageParamsRequestModel pageParamsRequestModel);
         Task<UserModelResponse> GetUserById(int UserId);
         bool CreateUser(UserModel userModel);
         bool UpdateUser(UserModel userModel);

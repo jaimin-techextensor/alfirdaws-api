@@ -31,13 +31,13 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-                List<CampaignTypeModel> campaignTypes = _context.CampaignTypes
-                                                .Select(c => new CampaignTypeModel
-                                                {
-                                                    Name = c.Name,
-                                                    CampaignTypeId = c.CampaignTypeId
-                                                }).ToList();
-
+                var campaignTypes = (from campaignType in _context.CampaignTypes
+                           select new CampaignTypeModel
+                            {
+                               Name = campaignType.Name,
+                               CampaignTypeId = campaignType.CampaignTypeId
+                           }).ToList();
+                
                 return Task.FromResult(campaignTypes);
             }
             catch (Exception)
@@ -80,6 +80,7 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
+
         /// <summary>
         /// Updates a campaign type
         /// </summary>

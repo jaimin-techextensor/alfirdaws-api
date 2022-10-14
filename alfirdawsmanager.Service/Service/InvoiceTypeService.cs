@@ -30,12 +30,12 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-                List<InvoiceTypeModel> invoiceTypes = _context.InvoiceTypes
-                                                .Select(c => new InvoiceTypeModel
-                                                {
-                                                    Name = c.Name,
-                                                    InvoiceTypeId = c.InvoiceTypeId
-                                                }).ToList();
+                var invoiceTypes = (from invoiceType in _context.InvoiceTypes
+                                    select new InvoiceTypeModel
+                                    {
+                                        Name = invoiceType.Name,
+                                        InvoiceTypeId = invoiceType.InvoiceTypeId
+                                    }).ToList();
 
                 return Task.FromResult(invoiceTypes);
             }
@@ -45,7 +45,6 @@ namespace alfirdawsmanager.Service.Service
             }
 
         }
-
 
         /// <summary>
         /// Creates a new invoice type

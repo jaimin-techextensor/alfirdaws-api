@@ -32,60 +32,49 @@ namespace alfirdawsmanager.Service.Service
             {
                 if (!string.IsNullOrEmpty(pageParamsRequestModel.SearchText) && pageParamsRequestModel.SearchText != "null")
                 {
-                    var dataToReturn = PagedList<CampaignModel>.ToPagedList(_context.Campaigns
-                                                  .Include(a => a.CampaignType)
-                                                  .Include(a => a.ReachType)
-                                                  .Include(a => a.PeriodType)
-                                                  .Where(a => (((a.CampaignType != null && a.CampaignType.Name != null) && (a.CampaignType.Name.Contains(pageParamsRequestModel.SearchText)))
-                                                                          || ((a.ReachType != null && a.ReachType.Name != null) && (a.ReachType.Name.Contains(pageParamsRequestModel.SearchText)))
-                                                                          || ((a.PeriodType != null && a.PeriodType.Name != null) && (a.PeriodType.Name.Contains(pageParamsRequestModel.SearchText)))))
-                                                  .Select(c => new CampaignModel
-                                                  {
-                                                      CampaignId = c.CampaignId,
-                                                      CampaignTypeId = c.CampaignTypeId,
-                                                      ReachTypeId = c.ReachTypeId,
-                                                      PeriodTypeId = c.PeriodTypeId,
-                                                      CampaignTypeName = c.CampaignType.Name,
-                                                      ReachTypeName = c.ReachType.Name,
-                                                      PeriodTypeName = c.PeriodType.Name,
-                                                      Description = c.Description,
-                                                      Active = c.Active,
-                                                      DiscountPercentage = c.DiscountPercentage,
-                                                      ImpactPosition = c.ImpactPosition,
-                                                      ImpactViews = c.ImpactViews,
-                                                      NetPrice = c.NetPrice,
-                                                      Price = c.Price,
-                                                      PricePerDay = c.PricePerDay,
-                                                      Saving = c.Saving,
-                                                      Visual = c.Visual,
-                                                      NrOfDays = c.PeriodType.NrOfDays
-                                                  }).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+                    var list = (from campaign in _context.Campaigns.Include(a => a.CampaignType).Include(a => a.PeriodType).Include(a => a.ReachType)
+                                where (campaign.CampaignType != null && campaign.CampaignType.Name != null && campaign.CampaignType.Name.Contains(pageParamsRequestModel.SearchText)
+                                                                          || campaign.ReachType != null && campaign.ReachType.Name != null && campaign.ReachType.Name.Contains(pageParamsRequestModel.SearchText)
+                                                                          || campaign.PeriodType != null && campaign.PeriodType.Name != null && campaign.PeriodType.Name.Contains(pageParamsRequestModel.SearchText))
+                                select new CampaignModel
+                                {
+                                    CampaignId = campaign.CampaignId,
+                                    CampaignTypeId = campaign.CampaignTypeId,
+                                    ReachTypeId = campaign.ReachTypeId,
+                                    PeriodTypeId = campaign.PeriodTypeId,
+                                    CampaignTypeName = campaign.CampaignType.Name,
+                                    ReachTypeName = campaign.ReachType.Name,
+                                    PeriodTypeName = campaign.PeriodType.Name,
+                                    NrOfDays = campaign.PeriodType.NrOfDays,
+                                    Price = campaign.Price,
+                                    DiscountPercentage = campaign.DiscountPercentage,
+                                    NetPrice = campaign.NetPrice,
+                                    Active = campaign.Active,
+                                }).ToList();
+                    var dataToReturn = PagedList<CampaignModel>.ToPagedList(list, pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
 
                     return dataToReturn;
                 }
                 else
                 {
-                    var dataToReturn = PagedList<CampaignModel>.ToPagedList(_context.Campaigns.OrderByDescending(a => a.CampaignId).Select(c => new CampaignModel
-                    {
-                        CampaignId = c.CampaignId,
-                        CampaignTypeId = c.CampaignTypeId,
-                        ReachTypeId = c.ReachTypeId,
-                        PeriodTypeId = c.PeriodTypeId,
-                        CampaignTypeName = c.CampaignType.Name,
-                        ReachTypeName = c.ReachType.Name,
-                        PeriodTypeName = c.PeriodType.Name,
-                        Description = c.Description,
-                        Active = c.Active,
-                        DiscountPercentage = c.DiscountPercentage,
-                        ImpactPosition = c.ImpactPosition,
-                        ImpactViews = c.ImpactViews,
-                        NetPrice = c.NetPrice,
-                        Price = c.Price,
-                        PricePerDay = c.PricePerDay,
-                        Saving = c.Saving,
-                        Visual = c.Visual,
-                        NrOfDays = c.PeriodType.NrOfDays
-                    }).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+                    var list = (from campaign in _context.Campaigns.Include(a => a.CampaignType).Include(a => a.PeriodType).Include(a => a.ReachType)
+                                select new CampaignModel
+                                {
+                                    CampaignId = campaign.CampaignId,
+                                    CampaignTypeId = campaign.CampaignTypeId,
+                                    ReachTypeId = campaign.ReachTypeId,
+                                    PeriodTypeId = campaign.PeriodTypeId,
+                                    CampaignTypeName = campaign.CampaignType.Name,
+                                    ReachTypeName = campaign.ReachType.Name,
+                                    PeriodTypeName = campaign.PeriodType.Name,
+                                    NrOfDays = campaign.PeriodType.NrOfDays,
+                                    Price = campaign.Price,
+                                    DiscountPercentage = campaign.DiscountPercentage,
+                                    NetPrice = campaign.NetPrice,
+                                    Active = campaign.Active,
+                                }).ToList();
+
+                    var dataToReturn = PagedList<CampaignModel>.ToPagedList(list, pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
                     return dataToReturn;
                 }
 
@@ -132,6 +121,7 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
+
         /// <summary>
         /// Updates a campaign
         /// </summary>

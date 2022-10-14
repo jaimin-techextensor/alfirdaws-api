@@ -28,19 +28,18 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-                List<CountryModel> countries = _context.Countries
-                                                .Include(s => s.Regions)
-                                                .Select(c => new CountryModel
-                                                {
-                                                    CountryId = c.CountryId,
-                                                    Flag = c.Flag,
-                                                    Active = c.Active,
-                                                    Icon = c.Icon,
-                                                    Name = c.Name,
-                                                    CountRegions = c.Regions.Count(),
-                                                    Regions = _mapper.Map<List<RegionModel>>(c.Regions.ToList())
-                                                }
-                                                ).ToList();
+                var countries = (from country in _context.Countries.Include(a => a.Regions)
+                            select new CountryModel
+                            {
+                                CountryId = country.CountryId,
+                                Flag = country.Flag,
+                                Active = country.Active,
+                                Icon = country.Icon,
+                                Name = country.Name,
+                                CountRegions = country.Regions.Count(),
+                                Regions = _mapper.Map<List<RegionModel>>(country.Regions.ToList())
+                            }).ToList();
+               
                 return Task.FromResult(countries);
 
             }

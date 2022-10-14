@@ -32,38 +32,45 @@ namespace alfirdawsmanager.Service.Service
             {
                 if (!string.IsNullOrEmpty(pageParamsRequestModel.SearchText) && pageParamsRequestModel.SearchText != "null")
                 {
-                    var dataToReturn = PagedList<Models.SubscriptionModel>.ToPagedList(_context.SubscriptionModels
-                                                  .Where(a => (((a.Name != null && a.Name != null) && (a.Name.Contains(pageParamsRequestModel.SearchText)))
-                                                                          || ((a.SubscriptionType != null && a.SubscriptionType != null) && (a.SubscriptionType.Contains(pageParamsRequestModel.SearchText)))
-                                                                          || ((a.UserType != null && a.UserType != null) && (a.UserType.Contains(pageParamsRequestModel.SearchText)))))
-                                                  .Select(c => new Models.SubscriptionModel
-                                                  {
-                                                      SubscriptionModelId = c.SubscriptionModelId,
-                                                      Name = c.Name,
-                                                      UserType = c.UserType,
-                                                      SubscriptionType = c.SubscriptionType,
-                                                      NrOfAds = c.NrOfAds,
-                                                      NrOfPictures = c.NrOfPictures,
-                                                      Active = c.Active,
-                                                  }).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+                    var list = (from subscriptionModel in _context.SubscriptionModels
+                                where (subscriptionModel.Name != null && subscriptionModel.Name != null && subscriptionModel.Name.Contains(pageParamsRequestModel.SearchText)
+                                                                          || subscriptionModel.SubscriptionType != null && subscriptionModel.SubscriptionType != null && subscriptionModel.SubscriptionType.Contains(pageParamsRequestModel.SearchText)
+                                                                          || subscriptionModel.UserType != null && subscriptionModel.UserType != null && subscriptionModel.UserType.Contains(pageParamsRequestModel.SearchText))
+                                select new Models.SubscriptionModel
+                                {
+                                    Visual = subscriptionModel.Visual,
+                                    Name = subscriptionModel.Name,
+                                    UserType = subscriptionModel.UserType,
+                                    SubscriptionType = subscriptionModel.SubscriptionType,
+                                    NrOfAds = subscriptionModel.NrOfAds,
+                                    NrOfPictures = subscriptionModel.NrOfPictures,
+                                    Active = subscriptionModel.Active,
+                                    SubscriptionModelId = subscriptionModel.SubscriptionModelId
+                                }).ToList();
+
+                    var dataToReturn = PagedList<Models.SubscriptionModel>.ToPagedList(list, pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
 
                     return dataToReturn;
                 }
                 else
                 {
-                    var dataToReturn = PagedList<Models.SubscriptionModel>.ToPagedList(_context.SubscriptionModels.OrderByDescending(a => a.SubscriptionModelId).Select(c => new Models.SubscriptionModel
-                    {
-                        SubscriptionModelId = c.SubscriptionModelId,
-                        Name = c.Name,
-                        UserType = c.UserType,
-                        SubscriptionType = c.SubscriptionType,
-                        NrOfAds = c.NrOfAds,
-                        NrOfPictures = c.NrOfPictures,
-                        Active = c.Active
-                    }).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+                    var list = (from subscriptionModel in _context.SubscriptionModels
+                                select new Models.SubscriptionModel
+                                {
+                                    Visual = subscriptionModel.Visual,
+                                    Name = subscriptionModel.Name,
+                                    UserType = subscriptionModel.UserType,
+                                    SubscriptionType = subscriptionModel.SubscriptionType,
+                                    NrOfAds = subscriptionModel.NrOfAds,
+                                    NrOfPictures = subscriptionModel.NrOfPictures,
+                                    Active = subscriptionModel.Active,
+                                    SubscriptionModelId = subscriptionModel.SubscriptionModelId
+                                }).ToList();
+
+                    var dataToReturn = PagedList<Models.SubscriptionModel>.ToPagedList(list, pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+
                     return dataToReturn;
                 }
-
             }
             catch (Exception)
             {
@@ -113,6 +120,7 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
+
         /// <summary>
         /// Updates a subscription model
         /// </summary>

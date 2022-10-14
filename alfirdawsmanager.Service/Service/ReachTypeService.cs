@@ -29,12 +29,12 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-                List<ReachTypeModel> reachTypes = _context.ReachTypes
-                                                .Select(c => new ReachTypeModel
-                                                {
-                                                    Name = c.Name,
-                                                    ReachTypeId = c.ReachTypeId
-                                                }).ToList();
+                var reachTypes = (from reachType in _context.ReachTypes
+                                  select new ReachTypeModel
+                                  {
+                                      Name = reachType.Name,
+                                      ReachTypeId = reachType.ReachTypeId
+                                  }).ToList();
 
                 return Task.FromResult(reachTypes);
             }
@@ -78,6 +78,7 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
+
         /// <summary>
         /// Updates a reach type
         /// </summary>

@@ -1,5 +1,4 @@
-﻿using System;
-using alfirdawsmanager.Data.Models;
+﻿using alfirdawsmanager.Data.Models;
 using alfirdawsmanager.Data.Repository;
 using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Models;
@@ -33,43 +32,19 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-               // var dataToReturn = new List<CategoryModel>();
-               // var sub_repo = new RepositoryPattern<SubCategory>();
+                var categories = (from category in _context.Categories.Include(a => a.SubCategories)
+                                  select new CategoryModel
+                                  {
+                                      CategoryId = category.CategoryId,
+                                      Sequence = category.Sequence,
+                                      Active = category.Active,
+                                      Icon = category.Icon,
+                                      Name = category.Name,
+                                      CountSubcategories = category.SubCategories.Count(),
+                                      Subcategories = _mapper.Map<List<SubCategoryModel>>(category.SubCategories.ToList())
+                                  }).ToList();
 
-               // using (var repo = new RepositoryPattern<Category>())
-               // {
-                    //List<Category> categories = repo.SelectAll().OrderBy(c => c.Sequence).ToList();
-
-                    List<CategoryModel> categories = _context.Categories
-                                                    .Include(s => s.SubCategories)
-                                                    .Select(c => new CategoryModel
-                                                    {
-                                                        CategoryId = c.CategoryId,
-                                                        Sequence = c.Sequence,
-                                                        Active = c.Active,
-                                                        Icon = c.Icon,
-                                                        Name = c.Name,
-                                                        CountSubcategories = c.SubCategories.Count(),
-                                                        Subcategories = _mapper.Map<List<SubCategoryModel>>(c.SubCategories.ToList())
-                                                       
-                                                    }
-                                                    ).ToList();
-
-                    //foreach (var category in categories)
-                    //{
-                    //    CategoryModel catModel = new CategoryModel();
-                    //    catModel.CategoryId = category.CategoryId;
-                    //    catModel.Name = category.Name;
-                    //    catModel.Sequence = category.Sequence;
-                    //    catModel.Icon = category.Icon;
-                    //    catModel.Active = category.Active;
-                    //    catModel.CountSubcategories = sub_repo.SelectAll().Where(c => c.CategoryId == category.CategoryId).Count(); 
-
-                    //    dataToReturn.Add(catModel);
-                    //}
-                    //return Task.FromResult(dataToReturn);
-                    return Task.FromResult(categories); 
-               // }
+                return Task.FromResult(categories);
             }
             catch (Exception)
             {
@@ -183,10 +158,10 @@ namespace alfirdawsmanager.Service.Service
                 var objCat = _context.Categories.Where(a => a.CategoryId == catRequest.CategoryId).SingleOrDefault();
                 if (objCat != null)
                 {
-                   if(catRequest.Name != null) objCat.Name = catRequest.Name;
-                   if(catRequest.Icon != null) objCat.Icon = catRequest.Icon;
-                   if(catRequest.Sequence != 0) objCat.Sequence = catRequest.Sequence;
-                   if(catRequest.Active != null) objCat.Active = catRequest.Active;
+                    if (catRequest.Name != null) objCat.Name = catRequest.Name;
+                    if (catRequest.Icon != null) objCat.Icon = catRequest.Icon;
+                    if (catRequest.Sequence != 0) objCat.Sequence = catRequest.Sequence;
+                    if (catRequest.Active != null) objCat.Active = catRequest.Active;
 
                     using (var repo = new RepositoryPattern<Category>())
                     {
@@ -212,17 +187,18 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-                var dataToReturn = new List<SubCategoryModel>();
+                var list = (from subCategory in _context.SubCategories
+                            where categoryId == subCategory.CategoryId
+                            select new SubCategoryModel
+                            {
+                                Active = subCategory.Active,
+                                Icon = subCategory.Icon,
+                                Name = subCategory.Name,
+                                Sequence = subCategory.Sequence,
+                                SubCategoryId = subCategory.SubCategoryId
+                            }).ToList();
 
-                using (var repo = new RepositoryPattern<SubCategory>())
-                {
-                    dataToReturn = _mapper.Map <List<SubCategoryModel>> (repo.SelectAll()
-                                                                             .Where(s => s.CategoryId == categoryId)
-                                                                             .OrderBy(c => c.Sequence)
-                                                                             .ToList()
-                                                                        );
-                    return Task.FromResult(dataToReturn);
-                }
+                return Task.FromResult(list);
             }
             catch (Exception)
             {
@@ -306,7 +282,7 @@ namespace alfirdawsmanager.Service.Service
         /// </summary>
         /// <param name="subcategoryId">The unique id of the subcategory</param>
         /// <returns>The subcategory object</returns>
-        public Task<SubCategoryModel> GetSubCategoryById( int subcategoryId)
+        public Task<SubCategoryModel> GetSubCategoryById(int subcategoryId)
         {
             try
             {
@@ -316,7 +292,7 @@ namespace alfirdawsmanager.Service.Service
                 {
                     var subcategory = _mapper.Map<SubCategoryModel>(repo.SelectByID(subcategoryId));
 
-                    if(subcategory != null)
+                    if (subcategory != null)
                     {
                         dataToReturn = subcategory;
                     }
@@ -371,16 +347,16 @@ namespace alfirdawsmanager.Service.Service
             {
                 bool success = true;
                 var subcategory = _context.SubCategories.FirstOrDefault(a => a.SubCategoryId == subCategoryId);
-                
+
                 if (subcategory != null)
                 {
                     subcategory.Active = isActive;
 
                     _context.Update(subcategory);
                     _context.SaveChanges();
-                    
+
                     success = true;
-                    return success; 
+                    return success;
                 }
                 return success = false;
             }

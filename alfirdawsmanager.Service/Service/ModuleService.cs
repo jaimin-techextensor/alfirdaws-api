@@ -7,7 +7,7 @@ using AutoMapper;
 
 namespace alfirdawsmanager.Service.Service
 {
-    public class ModuleService: IModuleInterface
+    public class ModuleService : IModuleInterface
     {
 
         #region Members
@@ -33,16 +33,19 @@ namespace alfirdawsmanager.Service.Service
         /// Retrieves the list of all modules
         /// </summary>
         /// <returns>List of module objects</returns>
-        public  Task<List<ModuleModel>> GetModulesOverview()
+        public Task<List<ModuleModel>> GetModulesOverview()
         {
             try
             {
-                var dataToReturn = new List<ModuleModel>();
-                using (var repo = new RepositoryPattern<Module>())
-                {
-                    dataToReturn = _mapper.Map<List<ModuleModel>>(repo.SelectAll().OrderBy(a => a.ModuleId).ToList());
-                    return Task.FromResult(dataToReturn);
-                }
+                var list = (from module in _context.Modules
+                            select new ModuleModel
+                            {
+                                Description = module.Description,
+                                ModuleId = module.ModuleId,
+                                Name = module.Name
+                            }).ToList();
+
+                return Task.FromResult(list);
             }
             catch (Exception)
             {

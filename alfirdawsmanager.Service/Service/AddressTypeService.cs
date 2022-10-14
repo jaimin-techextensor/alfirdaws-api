@@ -29,12 +29,12 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-                List<AddressTypeModel> addressTypes= _context.AddressTypes
-                                                .Select(c => new AddressTypeModel
-                                                {
-                                                    Name = c.Name,
-                                                    AddressTypeId = c.AddressTypeId
-                                                }).ToList();
+                var addressTypes = (from addressType in _context.AddressTypes
+                                    select new Models.AddressTypeModel
+                                    {
+                                        Name = addressType.Name,
+                                        AddressTypeId = addressType.AddressTypeId
+                                    }).ToList();
 
                 return Task.FromResult(addressTypes);
             }
@@ -77,6 +77,7 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
+
         /// <summary>
         /// Updates a address type
         /// </summary>

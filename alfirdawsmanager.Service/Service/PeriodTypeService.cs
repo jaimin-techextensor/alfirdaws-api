@@ -29,14 +29,14 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-                List<PeriodTypeModel> periodTypes = _context.PeriodTypes
-                                                .Select(c => new PeriodTypeModel
-                                                {
-                                                    Name = c.Name,
-                                                    NrOfDays = c.NrOfDays,
-                                                    PeriodTypeId = c.PeriodTypeId
-                                                }).ToList();
-
+                var periodTypes = (from periodType in _context.PeriodTypes
+                            select new PeriodTypeModel
+                            {
+                                Name = periodType.Name,
+                                NrOfDays = periodType.NrOfDays,
+                                PeriodTypeId = periodType.PeriodTypeId
+                            }).ToList();
+               
                 return Task.FromResult(periodTypes);
             }
             catch (Exception)
@@ -80,6 +80,7 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
+
         /// <summary>
         /// Updates a period type
         /// </summary>

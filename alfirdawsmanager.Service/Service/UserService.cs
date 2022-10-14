@@ -34,26 +34,57 @@ namespace alfirdawsmanager.Service.Service
         /// GetUsersOverview
         /// </summary>
         /// <returns></returns>
-        public PagedList<User> GetUsersOverview(PageParamsRequestModel pageParamsRequestModel)
+        public PagedList<UserModel> GetUsersOverview(PageParamsRequestModel pageParamsRequestModel)
         {
             try
             {
-                using (var repo = new RepositoryPattern<User>())
+                if (!string.IsNullOrEmpty(pageParamsRequestModel.SearchText) && pageParamsRequestModel.SearchText != "null")
                 {
-                    if (!string.IsNullOrEmpty(pageParamsRequestModel.SearchText) && pageParamsRequestModel.SearchText != "null")
-                    {
-                        var dataToReturn = PagedList<User>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.UserId).Where(a => (
-                                                                           ((a.UserName != null) && (a.UserName.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase)))
-                                                                        || ((a.Name != null) && (a.Name.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase)))
-                                                                        || ((a.Email != null) && (a.Email.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase))))).AsQueryable()
-                                                                       , pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
-                        return dataToReturn;
-                    }
-                    else
-                    {
-                        var dataToReturn = PagedList<User>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.UserId).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
-                        return dataToReturn;
-                    }
+                    var list = (from user in _context.Users
+                                where (user.UserName != null && user.UserName.Contains(pageParamsRequestModel.SearchText)
+                                                                    || user.Name != null && user.Name.Contains(pageParamsRequestModel.SearchText)
+                                                                    || user.Email != null && user.Email.Contains(pageParamsRequestModel.SearchText))
+                                select new UserModel
+                                {
+                                    Picture = user.Picture,
+                                    Name = user.Name,
+                                    UserName = user.UserName,
+                                    Email = user.Email,
+                                    Active = user.Active,
+                                    LastLoginTime = user.LastLoginTime,
+                                    UserId = user.UserId,
+                                    LastName = user.LastName,
+                                    IsPasswordChanged = user.IsPasswordChanged,
+                                    SendActivationEmail = user.SendActivationEmail,
+                                    ChangePwdAtNextLogin = user.ChangePwdAtNextLogin
+
+                                }).ToList();
+
+                    var dataToReturn = PagedList<UserModel>.ToPagedList(list, pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+
+                    return dataToReturn;
+                }
+                else
+                {
+                    var list = (from user in _context.Users
+                                select new UserModel
+                                {
+                                    Picture = user.Picture,
+                                    Name = user.Name,
+                                    UserName = user.UserName,
+                                    Email = user.Email,
+                                    Active = user.Active,
+                                    LastLoginTime = user.LastLoginTime,
+                                    UserId = user.UserId,
+                                    LastName = user.LastName,
+                                    IsPasswordChanged = user.IsPasswordChanged,
+                                    SendActivationEmail = user.SendActivationEmail,
+                                    ChangePwdAtNextLogin = user.ChangePwdAtNextLogin,
+                                }).ToList();
+
+                    var dataToReturn = PagedList<UserModel>.ToPagedList(list, pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+
+                    return dataToReturn;
                 }
             }
             catch (Exception ex)
@@ -95,7 +126,6 @@ namespace alfirdawsmanager.Service.Service
         }
         */
 
-
         public async Task<UserModelResponse> GetUserById(int UserId)
         {
             try
@@ -117,13 +147,13 @@ namespace alfirdawsmanager.Service.Service
                         }
 
                         var assignedroles = a_repo.SelectAll().Where(a => a.UserId == user.UserId);
-                       if(assignedroles != null)
+                        if (assignedroles != null)
                         {
                             dataToReturn.AssignedRoles = new List<AssignedRoles>();
                             foreach (var assignedRole in assignedroles)
                             {
                                 var role = r_repo.SelectAll().Where(r => r.RoleId == assignedRole.RoleId).SingleOrDefault();
-                                if(role != null)
+                                if (role != null)
                                 {
                                     AssignedRoles assignedRoles = new AssignedRoles { Name = role.Name, RoleId = role.RoleId };
                                     dataToReturn.AssignedRoles.Add(assignedRoles);
@@ -284,7 +314,7 @@ namespace alfirdawsmanager.Service.Service
         /// <param name="userId">The unique id of the user</param>
         /// <param name="roleId">The unique id of the role</param>
         /// <returns>Returns success or failuer boolean</returns>
-        public bool AssignRole (int userId, int roleId)
+        public bool AssignRole(int userId, int roleId)
         {
             try
             {

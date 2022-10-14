@@ -44,16 +44,31 @@ namespace alfirdawsmanager.Service.Service
                     List<Role> roles = new List<Role>();
                     if (!string.IsNullOrEmpty(pageParamsRequestModel.SearchText) && pageParamsRequestModel.SearchText != "null")
                     {
-                        return PagedList<Role>.ToPagedList(repo.SelectAll().OrderByDescending(a => a.RoleId)
-                                                                    .Where(a =>
-                                                                                ((a.Name != null) && (a.Name.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase)))
-                                                                             || ((a.Description != null) && (a.Description.Contains(pageParamsRequestModel.SearchText, StringComparison.OrdinalIgnoreCase)))
-                                                                   ).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+                        var list = (from role in _context.Roles
+                                    where (role.Name != null && role.Name.Contains(pageParamsRequestModel.SearchText)
+                                                                             || (role.Description != null && role.Description.Contains(pageParamsRequestModel.SearchText)))
+                                    select new Role
+                                    {
+                                        Name = role.Name,
+                                        Description = role.Description,
+                                        IsStatic = role.IsStatic,
+                                        RoleId = role.RoleId
+                                    }).ToList();
+
+                        return PagedList<Role>.ToPagedList(list, pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
                     }
                     else
                     {
-                        return PagedList<Role>.ToPagedList(repo.SelectAll().OrderBy(a => a.RoleId).AsQueryable(), pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
+                        var list = (from role in _context.Roles
+                                    select new Role
+                                    {
+                                        Name = role.Name,
+                                        Description = role.Description,
+                                        IsStatic = role.IsStatic,
+                                        RoleId = role.RoleId
+                                    }).ToList();
 
+                        return PagedList<Role>.ToPagedList(list, pageParamsRequestModel.PageNumber, pageParamsRequestModel.PageSize);
                     }
                 }
             }
@@ -62,8 +77,6 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
-
-
 
         /// <summary>
         /// Returns a specific role based on the given RoleId
@@ -123,7 +136,6 @@ namespace alfirdawsmanager.Service.Service
             }
         }
 
-
         /// <summary>
         /// Creates a new role
         /// </summary>
@@ -169,7 +181,6 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
-
 
         /// <summary>
         /// Updates the information of a role
@@ -220,7 +231,6 @@ namespace alfirdawsmanager.Service.Service
                 throw;
             }
         }
-
 
         /// <summary>
         /// Deletes a specific role with all its permissions

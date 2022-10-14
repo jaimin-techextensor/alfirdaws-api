@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using alfirdawsmanager.Data.Models;
 using alfirdawsmanager.Service.Interface;
 using alfirdawsmanager.Service.Models;
@@ -31,13 +32,13 @@ namespace alfirdawsmanager.Service.Service
         {
             try
             {
-                List<PaymentTypeModel> paymentTypes = _context.PaymentTypes
-                                                .Select(c => new PaymentTypeModel
-                                                {
-                                                    Name = c.Name,
-                                                    PaymentTypeId = c.PaymentTypeId,
-                                                    Icon = c.Icon
-                                                }).ToList();
+                var paymentTypes = (from paymentType in _context.PaymentTypes
+                            select new PaymentTypeModel
+                            {
+                                Name = paymentType.Name,
+                                PaymentTypeId = paymentType.PaymentTypeId,
+                                Icon = paymentType.Icon
+                            }).ToList();
 
                 return Task.FromResult(paymentTypes);
             }
