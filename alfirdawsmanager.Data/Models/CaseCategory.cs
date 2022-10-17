@@ -11,8 +11,8 @@ namespace alfirdawsmanager.Data.Models
         }
 
         public int CaseCategoryId { get; set; }
-        public string? Name { get; set; }
-        public bool? Active { get; set; }
+        public string Name { get; set; }
+        public bool Active { get; set; }
 
         public virtual ICollection<Case> Cases { get; set; }
     }
