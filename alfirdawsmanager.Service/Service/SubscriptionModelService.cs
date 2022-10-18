@@ -44,6 +44,8 @@ namespace alfirdawsmanager.Service.Service
                                     SubscriptionType = subscriptionModel.SubscriptionType,
                                     NrOfAds = subscriptionModel.NrOfAds,
                                     NrOfPictures = subscriptionModel.NrOfPictures,
+                                    UnlimitedAds = subscriptionModel.UnlimitedAds,
+                                    UnlimitedPictures = subscriptionModel.UnlimitedPictures,
                                     Active = subscriptionModel.Active,
                                     SubscriptionModelId = subscriptionModel.SubscriptionModelId
                                 }).ToList();
@@ -63,6 +65,8 @@ namespace alfirdawsmanager.Service.Service
                                     SubscriptionType = subscriptionModel.SubscriptionType,
                                     NrOfAds = subscriptionModel.NrOfAds,
                                     NrOfPictures = subscriptionModel.NrOfPictures,
+                                    UnlimitedAds = subscriptionModel.UnlimitedAds,
+                                    UnlimitedPictures = subscriptionModel.UnlimitedPictures,
                                     Active = subscriptionModel.Active,
                                     SubscriptionModelId = subscriptionModel.SubscriptionModelId
                                 }).ToList();
