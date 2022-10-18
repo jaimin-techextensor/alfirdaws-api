@@ -76,6 +76,7 @@ builder.Services.AddScoped<IVatTypeInterface, VatTypeService>();
 builder.Services.AddScoped<IPricingModelInterface, PricingModelService>();
 builder.Services.AddScoped<ICaseTypeInterface, CaseTypeService>();
 builder.Services.AddScoped<ICaseCategoryInterface, CaseCategoryService>();
+builder.Services.AddScoped<ICasePriorityInterface, CasePriorityService>();
 #endregion
 
 var config = new MapperConfiguration(cfg =>

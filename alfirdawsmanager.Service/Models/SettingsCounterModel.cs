@@ -22,9 +22,12 @@ namespace alfirdawsmanager.Service.Models
         public int paymentTypesCount { get; set; }
         public int invoiceTypesCount { get; set; }
         public int vATTypesCount { get; set; }
-        public int campaignTypesCount { get;set; }
-        public int reachTypesCount { get;set; }
-        public int periodTypesCount { get;set; }
-        public int pricingModelsCount { get;set; }
+        public int campaignTypesCount { get; set; }
+        public int reachTypesCount { get; set; }
+        public int periodTypesCount { get; set; }
+        public int pricingModelsCount { get; set; }
+        public int caseTypesCount { get; set; }
+        public int caseCategoriesCount { get; set; }
+        public int casePrioritiesCount { get; set; }
     }
 }

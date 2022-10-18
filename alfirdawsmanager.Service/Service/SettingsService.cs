@@ -41,6 +41,9 @@ namespace alfirdawsmanager.Service.Service
                 settingsCounterModel.reachTypesCount = _context.ReachTypes.Select(a => a.ReachTypeId).Count();
                 settingsCounterModel.periodTypesCount = _context.PeriodTypes.Select(a => a.PeriodTypeId).Count();
                 settingsCounterModel.pricingModelsCount = _context.PricingModels.Select(a => a.PricingModelId).Count();
+                settingsCounterModel.caseTypesCount = _context.CaseTypes.Select(a => a.CaseTypeId).Count();
+                settingsCounterModel.caseCategoriesCount = _context.CaseCategories.Select(a => a.CaseCategoryId).Count();
+                settingsCounterModel.casePrioritiesCount = _context.CasePriorities.Select(a => a.CasePriorityId).Count();
 
                 return settingsCounterModel;
             }
