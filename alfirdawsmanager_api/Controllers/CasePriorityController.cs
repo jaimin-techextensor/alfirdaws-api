@@ -125,7 +125,7 @@ namespace alfirdawsmanager_api.Controllers
             try
             {
                 IActionResult? response = null;
-                if ((casePriorityRequest.Name == null || casePriorityRequest.Color == null || casePriorityRequest.CasePriorityId == null || casePriorityRequest.CasePriorityId <= 0)
+                if (casePriorityRequest.Name == null || casePriorityRequest.Color == null || casePriorityRequest.CasePriorityId == null || casePriorityRequest.CasePriorityId <= 0)
                 {
                     return response = Ok(new { Success = false, Message = "Please fill in the required fields" });
                 }
